@@ -44,6 +44,9 @@ public class AuthenticationService {
             var jwtToken = jwtService.generateToken(user);
             saveUserToken(savedUser, jwtToken);
         }
+        else {
+            throw new IllegalStateException("User with this email already exists");
+        }
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         return AuthenticationResponse.builder()
