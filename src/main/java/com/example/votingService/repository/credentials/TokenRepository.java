@@ -1,4 +1,4 @@
-package com.example.votingService.repository;
+package com.example.votingService.repository.credentials;
 
 import com.example.votingService.domain.token.Token;
 import org.springframework.data.jpa.repository.JpaRepository;

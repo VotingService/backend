@@ -1,6 +1,6 @@
 package com.example.votingService.service.auth;
 
-import com.example.votingService.repository.TokenRepository;
+import com.example.votingService.repository.credentials.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

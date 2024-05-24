@@ -1,7 +1,7 @@
 package com.example.votingService.config;
 
 import com.example.votingService.config.auditing.ApplicationAuditAware;
-import com.example.votingService.repository.UserRepository;
+import com.example.votingService.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

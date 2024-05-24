@@ -26,7 +26,8 @@ public enum Role {
                     ADMIN_DELETE,
                     ADMIN_CREATE
             )
-    );
+    ),
+    CANDIDATE(Collections.emptySet());
 
     @Getter
     private final Set<Permission> permissions;

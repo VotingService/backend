@@ -2,7 +2,7 @@ package com.example.votingService.service.user;
 
 import com.example.votingService.domain.request.ChangePasswordRequest;
 import com.example.votingService.domain.user.User;
-import com.example.votingService.repository.UserRepository;
+import com.example.votingService.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;

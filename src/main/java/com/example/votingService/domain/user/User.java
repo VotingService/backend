@@ -1,13 +1,20 @@
 package com.example.votingService.domain.user;
 
+import com.example.votingService.domain.ballot.Ballot;
+import com.example.votingService.domain.election.Election;
 import com.example.votingService.domain.token.Token;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +24,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -36,9 +46,22 @@ public class User implements UserDetails {
     private String email;
     @Column(unique = true)
     private String password;
+    private Date birthDate;
+    private String location;
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Ballot ballot;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_election",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "election_id")
+    )
+    private Set<Election> elections = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
