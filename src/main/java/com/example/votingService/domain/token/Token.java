@@ -1,42 +1,47 @@
 package com.example.votingService.domain.token;
 
 import com.example.votingService.domain.user.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(schema = "public", name = "tokens")
 public class Token {
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @GeneratedValue
-    public Integer id;
-
-    @Column(unique = true)
-    public String token;
-
-    @Enumerated(EnumType.STRING)
-    public TokenType tokenType = TokenType.BEARER;
-
-    public boolean isRevoked;
-
-    public boolean isExpired;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    public User user;
+    @Column(name = "id", nullable = false)
+    private int id;
+    @Basic
+    @Column(name = "created_at", nullable = true)
+    private Timestamp createdAt;
+    @Basic
+    @Column(name = "expired_at", nullable = true)
+    private Timestamp expiredAt;
+    @Basic
+    @Column(name = "revoked_at", nullable = true)
+    private Timestamp revokedAt;
+    @Basic
+    @Column(name = "token", nullable = false, length = -1)
+    private String token;
+    @Basic
+    @Column(name = "token_type", nullable = true)
+    private TokenType tokenType;
+    @Basic
+    @Column(name = "is_revoked", nullable = false)
+    private boolean isRevoked;
+    @Basic
+    @Column(name = "is_expired", nullable = false)
+    private boolean isExpired;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }

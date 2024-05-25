@@ -38,6 +38,7 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
+                .birthDate(request.getBirthDate())
                 .build();
         if (!repository.existsCurrentAccountByEmail(request.getEmail())) {
             var savedUser = repository.save(user);
@@ -79,8 +80,6 @@ public class AuthenticationService {
                 .user(user)
                 .token(jwtToken)
                 .tokenType(TokenType.BEARER)
-                .isExpired(false)
-                .isRevoked(false)
                 .build();
         tokenRepository.save(token);
     }

@@ -2,20 +2,8 @@ package com.example.votingService.domain.user;
 
 import com.example.votingService.domain.ballot.Ballot;
 import com.example.votingService.domain.election.Election;
-import com.example.votingService.domain.token.Token;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import com.example.votingService.domain.location.Location;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,9 +11,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -34,70 +22,75 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(schema = "public", name = "users")
 public class User implements UserDetails {
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @GeneratedValue
-    private Integer id;
+    @Column(name = "id", nullable = false)
+    private int id;
+    @Basic
+    @Column(name = "created_at", nullable = true)
+    private Timestamp createdAt;
+    @Basic
+    @Column(name = "updated_at", nullable = true)
+    private Timestamp updatedAt;
+    @Basic
+    @Column(name = "firstname", nullable = false, length = -1)
     private String firstname;
+    @Basic
+    @Column(name = "lastname", nullable = false, length = -1)
     private String lastname;
-    @Column(unique = true)
+    @Basic
+    @Column(name = "email", nullable = false, length = -1)
     private String email;
-    @Column(unique = true)
+    @Basic
+    @Column(name = "password", nullable = false, length = -1)
     private String password;
+    @Basic
+    @Column(name = "birth_date", nullable = false)
     private Date birthDate;
-    private String location;
-
+    @Basic
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Ballot ballot;
-
+//    @OneToMany(mappedBy = "voter")
+//    private List<Ballot> ballotsAsVoter;
+//    @OneToMany(mappedBy = "candidate")
+//    private List<Ballot> ballotsAsCandidate;
+    @ManyToOne
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    private Location location;
     @ManyToMany
-    @JoinTable(
-            name = "user_election",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "election_id")
-    )
-    private Set<Election> elections = new HashSet<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<Token> tokens;
+    @JoinTable(name = "candidate_election", catalog = "vgzkuacl", schema = "public", joinColumns = @JoinColumn(name = "candidate_id", referencedColumnName = "id", nullable = false), inverseJoinColumns = @JoinColumn(name = "election_id", referencedColumnName = "id", nullable = false))
+    private Set<Election> elections;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return role.getAuthorities();
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
+        return null;
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return null;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return false;
     }
 }

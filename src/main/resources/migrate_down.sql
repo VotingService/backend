@@ -6,6 +6,5 @@ DROP TABLE "users";
 DROP TABLE "locations";
 
 DROP TYPE "role";
-DROP TYPE "strategy";
 DROP TYPE "token_type";
 DROP TYPE "voting_strategy";

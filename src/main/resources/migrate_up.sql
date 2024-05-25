@@ -3,11 +3,6 @@ CREATE TYPE "role" AS ENUM (
     'ADMIN'
     );
 
-CREATE TYPE "strategy" AS ENUM (
-    'USER',
-    'ADMIN'
-    );
-
 CREATE TYPE "token_type" AS ENUM (
     'BEARER'
     );
@@ -15,7 +10,7 @@ CREATE TYPE "token_type" AS ENUM (
 CREATE TYPE "voting_strategy" AS ENUM (
     'ApprovalVoting',
     'InstantRunOff',
-    'PlurarityVoting'
+    'PluralityVoting'
     );
 
 CREATE TABLE "tokens" (
@@ -67,7 +62,7 @@ CREATE TABLE "elections" (
                              "start_date" date NOT NULL,
                              "end_date" date NOT NULL,
                              "can_retract_vote" bool NOT NULL,
-                             "strategy" strategy NOT NULL,
+                             "strategy" voting_strategy NOT NULL,
                              "location_id" integer
 );
 
@@ -78,7 +73,8 @@ CREATE TABLE "ballots" (
                            "election_id" integer,
                            "user_id" integer,
                            "candidate_user_id" integer,
-                           "candidate_position" integer NOT NULL
+                           "candidate_position" integer NOT NULL,
+                           UNIQUE ("election_id", "user_id")
 );
 
 ALTER TABLE "tokens" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");

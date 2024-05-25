@@ -11,9 +11,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        transaction:
-          jta:
-            platform: True
 application:
   security:
     jwt:
