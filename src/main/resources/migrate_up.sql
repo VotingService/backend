@@ -46,9 +46,9 @@ CREATE TABLE "locations" (
                              "id" SERIAL PRIMARY KEY,
                              "country" varchar NOT NULL,
                              "city" varchar NOT NULL,
-                             "street_name" varchar NOT NULL,
-                             "house_number" varchar NOT NULL,
-                             "post_code" varchar NOT NULL
+                             "street_name" varchar,
+                             "house_number" varchar,
+                             "post_code" varchar
 );
 
 CREATE TABLE "users" (
