@@ -63,9 +63,6 @@ public class User implements UserDetails {
     )
     private Set<Election> elections = new HashSet<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<Token> tokens;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role.getAuthorities();
