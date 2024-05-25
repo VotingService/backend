@@ -3,11 +3,6 @@ CREATE TYPE "role" AS ENUM (
     'ADMIN'
     );
 
-CREATE TYPE "election_role" AS ENUM (
-    'VOTER',
-    'CANDIDATE'
-    );
-
 CREATE TYPE "strategy" AS ENUM (
     'USER',
     'ADMIN'
@@ -24,28 +19,27 @@ CREATE TYPE "voting_strategy" AS ENUM (
     );
 
 CREATE TABLE "tokens" (
-                         "id" SERIAL PRIMARY KEY,
-                         "created_at" timestamp,
-                         "expired_at" timestamp,
-                         "revoked_at" timestamp,
-                         "token" varchar NOT NULL,
-                         "token_type" token_type,
-                         "is_revoked" bool NOT NULL,
-                         "is_expired" bool NOT NULL,
-                         "user_id" integer
+                          "id" SERIAL PRIMARY KEY,
+                          "created_at" timestamp,
+                          "expired_at" timestamp,
+                          "revoked_at" timestamp,
+                          "token" varchar NOT NULL,
+                          "token_type" token_type,
+                          "is_revoked" bool NOT NULL DEFAULT false,
+                          "is_expired" bool NOT NULL DEFAULT false,
+                          "user_id" integer
 );
 
-CREATE TABLE "user_election" (
-                                 "user_id" integer,
-                                 "election_id" integer,
-                                 "role" election_role NOT NULL,
-                                 PRIMARY KEY ("user_id", "election_id")
+CREATE TABLE "candidate_election" (
+                                      "candidate_id" integer,
+                                      "election_id" integer,
+                                      PRIMARY KEY ("candidate_id", "election_id")
 );
 
 CREATE TABLE "locations" (
                              "id" SERIAL PRIMARY KEY,
                              "country" varchar NOT NULL,
-                             "city" varchar NOT NULL,
+                             "city" varchar,
                              "street_name" varchar,
                              "house_number" varchar,
                              "post_code" varchar
@@ -59,6 +53,7 @@ CREATE TABLE "users" (
                          "lastname" varchar NOT NULL,
                          "email" varchar NOT NULL,
                          "password" varchar NOT NULL,
+                         "birth_date" date NOT NULL,
                          "role" role NOT NULL,
                          "location_id" integer
 );
@@ -88,9 +83,9 @@ CREATE TABLE "ballots" (
 
 ALTER TABLE "tokens" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
-ALTER TABLE "user_election" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+ALTER TABLE "candidate_election" ADD FOREIGN KEY ("candidate_id") REFERENCES "users" ("id");
 
-ALTER TABLE "user_election" ADD FOREIGN KEY ("election_id") REFERENCES "elections" ("id");
+ALTER TABLE "candidate_election" ADD FOREIGN KEY ("election_id") REFERENCES "elections" ("id");
 
 ALTER TABLE "users" ADD FOREIGN KEY ("location_id") REFERENCES "locations" ("id");
 
