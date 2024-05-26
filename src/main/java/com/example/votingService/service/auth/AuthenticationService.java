@@ -2,6 +2,7 @@ package com.example.votingService.service.auth;
 
 
 import com.example.votingService.config.JwtService;
+import com.example.votingService.domain.location.Location;
 import com.example.votingService.domain.request.AuthenticationRequest;
 import com.example.votingService.domain.request.RegisterRequest;
 import com.example.votingService.domain.response.AuthenticationResponse;
@@ -9,6 +10,7 @@ import com.example.votingService.domain.token.Token;
 import com.example.votingService.domain.token.TokenType;
 import com.example.votingService.domain.user.User;
 import com.example.votingService.repository.credentials.TokenRepository;
+import com.example.votingService.repository.location.LocationRepository;
 import com.example.votingService.repository.user.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,16 +30,25 @@ public class AuthenticationService {
     private final UserRepository repository;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
+    private final LocationRepository locationRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        var location = Location.builder()
+                .country(request.getLocation().getCountry())
+                .city(request.getLocation().getCity())
+                .build();
+        var savedLocation = locationRepository.save(location);
+        
         var user = User.builder()
                 .firstname(request.getFirstName())
                 .lastname(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
+                .birthDate(request.getBirthDate())
+                .location(savedLocation)
                 .build();
         if (!repository.existsCurrentAccountByEmail(request.getEmail())) {
             var savedUser = repository.save(user);

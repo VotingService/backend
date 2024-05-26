@@ -2,6 +2,7 @@ package com.example.votingService.domain.user;
 
 import com.example.votingService.domain.ballot.Ballot;
 import com.example.votingService.domain.election.Election;
+import com.example.votingService.domain.location.Location;
 import com.example.votingService.domain.token.Token;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -42,15 +43,17 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String password;
     private Date birthDate;
-    @Basic
-    @Column(name = "location", nullable = true)
-    private String location;
+    @ManyToOne
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    private Location location;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Ballot ballot;
+    @OneToMany(mappedBy = "voter")
+    private List<Ballot> ballotsAsVoter;
+    @OneToMany(mappedBy = "candidate")
+    private List<Ballot> ballotsAsCandidate;
 
     @ManyToMany
     @JoinTable(

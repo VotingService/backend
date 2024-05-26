@@ -1,6 +1,7 @@
 package com.example.votingService.domain.election;
 
 import com.example.votingService.domain.ballot.Ballot;
+import com.example.votingService.domain.location.Location;
 import com.example.votingService.domain.user.User;
 import com.example.votingService.domain.votingstrategy.VotingStrategy;
 import jakarta.persistence.*;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -38,13 +40,16 @@ public class Election {
     private Date endDate;
     private boolean canRetractVote;
 
-    @Transient
-    private VotingStrategy votingStrategy;
-    @Basic
-    @Column(name = "location", nullable = false)
-    private String location;
+//    @Transient
+    @Enumerated(EnumType.STRING)
+    private VotingStrategyType votingStrategy;
+    @ManyToOne
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    private Location location;
 
-    @OneToMany(mappedBy = "election", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Ballot> ballots = new HashSet<>();
+    @OneToMany(mappedBy = "election")
+    private List<Ballot> ballots;
+    @ManyToMany(mappedBy = "elections")
+    private Set<User> candidates;
 
 }

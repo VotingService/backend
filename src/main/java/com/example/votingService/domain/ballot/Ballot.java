@@ -3,17 +3,13 @@ package com.example.votingService.domain.ballot;
 
 import com.example.votingService.domain.election.Election;
 import com.example.votingService.domain.user.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
 
 @Data
 @Builder
@@ -26,14 +22,21 @@ public class Ballot {
     @Id
     @GeneratedValue
     private Integer id;
-
+    @Basic
+    @Column(name = "created_at", nullable = true)
+    private Timestamp createdAt;
+    @Basic
+    @Column(name = "updated_at", nullable = true)
+    private Timestamp updatedAt;
     @ManyToOne
     @JoinColumn(name = "election_id", nullable = false)
     private Election election;
-
-    @OneToOne
-    @JoinColumn(name = "user_id", unique = true, nullable = false)
-    private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User voter;
+    @ManyToOne
+    @JoinColumn(name = "candidate_id", referencedColumnName = "id")
+    private User candidate;
 
     private Integer candidatePosition;
 }
