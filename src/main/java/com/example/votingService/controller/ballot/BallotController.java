@@ -3,10 +3,13 @@ package com.example.votingService.controller.ballot;
 import com.example.votingService.domain.ballot.Ballot;
 import com.example.votingService.domain.election.Election;
 import com.example.votingService.domain.request.ChangePasswordRequest;
+import com.example.votingService.domain.request.CreateBallotRequest;
 import com.example.votingService.domain.user.User;
 import com.example.votingService.dto.BallotDto;
+import com.example.votingService.dto.ElectionDto;
 import com.example.votingService.dto.UserDto;
 import com.example.votingService.dto.assembler.BallotDtoAssembler;
+import com.example.votingService.dto.assembler.ElectionDtoAssembler;
 import com.example.votingService.dto.assembler.LocationDtoAssembler;
 import com.example.votingService.dto.assembler.UserDtoAssembler;
 import com.example.votingService.service.ballot.BallotService;
@@ -38,6 +41,8 @@ public class BallotController {
     private final BallotService service;
     @Autowired
     private BallotDtoAssembler ballotDtoAssembler;
+    @Autowired
+    private ElectionDtoAssembler electionDtoAssembler;
 
     @GetMapping
     public ResponseEntity<CollectionModel<BallotDto>> findAllBallots() {
@@ -54,7 +59,7 @@ public class BallotController {
     }
 
     @PostMapping
-    public ResponseEntity<BallotDto> createBallot(@RequestBody Ballot ballot) {
+    public ResponseEntity<BallotDto> createBallot(@RequestBody CreateBallotRequest ballot) {
         Ballot newBallot = service.createBallot(ballot);
         BallotDto ballotDto = ballotDtoAssembler.toModel(newBallot);
         return new ResponseEntity<>(ballotDto, HttpStatus.CREATED);
@@ -77,5 +82,12 @@ public class BallotController {
         List<Ballot> ballots = service.getAllBallotsByVoter(id);
         CollectionModel<BallotDto> ballotDtos = ballotDtoAssembler.toCollectionModel(ballots);
         return new ResponseEntity<>(ballotDtos, HttpStatus.OK);
+    }
+
+    @GetMapping("/elections/{id}")
+    public ResponseEntity<CollectionModel<ElectionDto>> findAllElectionByVoterId(@PathVariable Integer id) {
+        List<Election> elections = service.getAllElectionByVoterId(id);
+        CollectionModel<ElectionDto> electionDtos = electionDtoAssembler.toCollectionModel(elections);
+        return new ResponseEntity<>(electionDtos, HttpStatus.OK);
     }
 }

@@ -3,19 +3,21 @@ package com.example.votingService.domain.election;
 import com.example.votingService.domain.ballot.Ballot;
 import com.example.votingService.domain.location.Location;
 import com.example.votingService.domain.user.User;
-import com.example.votingService.domain.votingstrategy.VotingStrategy;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -24,20 +26,16 @@ public class Election {
     @Id
     @GeneratedValue
     private Integer id;
-
-    @ManyToMany(mappedBy = "elections")
-    private Set<User> users = new HashSet<>();
-
     @Basic
     @Column(name = "created_at", nullable = true)
     private Timestamp createdAt;
     @Basic
     @Column(name = "updated_at", nullable = true)
     private Timestamp updatedAt;
-    private String name;
+    private String title;
     private String description;
-    private Date startDate;
-    private Date endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private boolean canRetractVote;
 
 //    @Transient
@@ -51,5 +49,9 @@ public class Election {
     private List<Ballot> ballots;
     @ManyToMany(mappedBy = "elections")
     private Set<User> candidates;
+
+    public Boolean getCanRetractVote() {
+        return canRetractVote;
+    }
 
 }

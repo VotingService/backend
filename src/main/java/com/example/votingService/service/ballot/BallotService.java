@@ -1,10 +1,14 @@
 package com.example.votingService.service.ballot;
 
+import com.example.votingService.controller.election.ElectionController;
 import com.example.votingService.domain.ballot.Ballot;
+import com.example.votingService.domain.election.Election;
 import com.example.votingService.domain.request.ChangePasswordRequest;
+import com.example.votingService.domain.request.CreateBallotRequest;
 import com.example.votingService.domain.user.Role;
 import com.example.votingService.domain.user.User;
 import com.example.votingService.repository.ballot.BallotRepository;
+import com.example.votingService.repository.election.ElectionRepository;
 import com.example.votingService.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +24,10 @@ import java.util.List;
 public class BallotService {
     @Autowired
     private final BallotRepository repository;
+    @Autowired
+    private final ElectionRepository electionRepository;
+    @Autowired
+    private final UserRepository userRepository;
 
     public List<Ballot> findAllBallots() {
         return repository.findAll();
@@ -29,7 +37,16 @@ public class BallotService {
         return repository.findById(id).orElseThrow();
     }
 
-    public Ballot createBallot(Ballot ballot) {
+    public Ballot createBallot(CreateBallotRequest ballotRequest) {
+        var election = electionRepository.findById(ballotRequest.getElection_id()).orElseThrow();
+        var candidate = userRepository.findById(ballotRequest.getCandidate_id()).orElseThrow();
+        var voter = userRepository.findById(ballotRequest.getVoter_id()).orElseThrow();
+        Ballot ballot = Ballot.builder()
+                .election(election)
+                .candidate(candidate)
+                .voter(voter)
+                .candidatePosition(ballotRequest.getCandidatePosition())
+                .build();
         return repository.save(ballot);
     }
 
@@ -44,5 +61,9 @@ public class BallotService {
     public List<Ballot> getAllBallotsByVoter(Integer id){
         return repository.getAllBallotsByVoterId(id);
     }
+
+    public List<Election> getAllElectionByVoterId(Integer id) {
+        return repository.getAllElectionByVoterId(id);
+    };
 }
 
