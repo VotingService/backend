@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://cornelius.db.elephantsql.com:5432/vgzkuacl
-    username: vgzkuacl
-    password: 3s_YxMM0SeZKlP0wxFgIKo3A34HafAVa
+    url: jdbc:postgresql://localhost:5432/voting_service
+    username: postgres
+    password: 6125237
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -11,9 +11,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        transaction:
-          jta:
-            platform: True
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
 application:
   security:
     jwt:

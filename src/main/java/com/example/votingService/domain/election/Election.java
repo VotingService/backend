@@ -3,18 +3,12 @@ package com.example.votingService.domain.election;
 import com.example.votingService.domain.ballot.Ballot;
 import com.example.votingService.domain.user.User;
 import com.example.votingService.domain.votingstrategy.VotingStrategy;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_election")
+@Table(name = "elections")
 public class Election {
     @Id
     @GeneratedValue
@@ -32,6 +26,12 @@ public class Election {
     @ManyToMany(mappedBy = "elections")
     private Set<User> users = new HashSet<>();
 
+    @Basic
+    @Column(name = "created_at", nullable = true)
+    private Timestamp createdAt;
+    @Basic
+    @Column(name = "updated_at", nullable = true)
+    private Timestamp updatedAt;
     private String name;
     private String description;
     private Date startDate;
@@ -40,6 +40,8 @@ public class Election {
 
     @Transient
     private VotingStrategy votingStrategy;
+    @Basic
+    @Column(name = "location", nullable = false)
     private String location;
 
     @OneToMany(mappedBy = "election", cascade = CascadeType.ALL, orphanRemoval = true)
