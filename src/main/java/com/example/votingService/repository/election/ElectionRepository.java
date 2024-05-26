@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface ElectionRepository extends JpaRepository<Election, Integer> {
 
-    @Query
-    public List<Integer> getAllCandidatesByElection(Election election);
+//    @Query
+//    public List<Integer> getAllCandidatesByElection(Election election);
 }

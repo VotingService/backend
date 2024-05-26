@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface BallotRepository extends JpaRepository<Ballot, Integer> {
 
     @Query(value = "select b.id from Ballot b where b.voter.id = :id")
-    public List<Integer> getAllBallotsByVoter(Integer id);
+    public List<Ballot> getAllBallotsByVoterId(Integer id);
 
 //    boolean existsCurrentAccountByEmail(String email);
 }
