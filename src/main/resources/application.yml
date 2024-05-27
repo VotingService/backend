@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/voting_service
-    username: username
-    password: password
+    username: postgres
+    password: 6125237
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

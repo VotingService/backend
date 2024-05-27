@@ -13,13 +13,10 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class CreateBallotRequest {
 
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String password;
-    private Role role;
-    private Date birthDate;
-    private Location location;
+    private Integer election_id;
+    private Integer voter_id;
+    private Integer candidate_id;
+    private Integer candidatePosition;
 }

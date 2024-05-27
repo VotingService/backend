@@ -1,6 +1,6 @@
 package com.example.votingService.config;
 
-import com.example.votingService.repository.TokenRepository;
+import com.example.votingService.repository.credentials.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

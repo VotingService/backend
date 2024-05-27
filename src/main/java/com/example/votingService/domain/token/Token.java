@@ -1,30 +1,34 @@
 package com.example.votingService.domain.token;
 
 import com.example.votingService.domain.user.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "tokens")
 public class Token {
 
     @Id
     @GeneratedValue
     public Integer id;
+    @Basic
+    @Column(name = "created_at", nullable = true)
+    private Timestamp createdAt;
+    @Basic
+    @Column(name = "revoked_at", nullable = true)
+    private Timestamp revokedAt;
+    @Basic
+    @Column(name = "expired_at", nullable = true)
+    private Timestamp expiredAt;
 
     @Column(unique = true)
     public String token;
