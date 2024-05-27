@@ -1,13 +1,10 @@
 package com.example.votingService.service.ballot;
 
-import com.example.votingService.controller.election.ElectionController;
 import com.example.votingService.domain.ballot.Ballot;
 import com.example.votingService.domain.election.Election;
 import com.example.votingService.domain.election.VotingStrategyType;
-import com.example.votingService.domain.request.ChangePasswordRequest;
 import com.example.votingService.domain.request.CreateBallotRequest;
-import com.example.votingService.domain.user.Role;
-import com.example.votingService.domain.user.User;
+import com.example.votingService.domain.request.VoteRequest;
 import com.example.votingService.repository.ballot.BallotRepository;
 import com.example.votingService.repository.election.ElectionRepository;
 import com.example.votingService.repository.user.UserRepository;
@@ -16,11 +13,8 @@ import com.example.votingService.service.votingstrategy.DistributionVotingStrate
 import com.example.votingService.service.votingstrategy.PluralityVotingStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -70,5 +64,25 @@ public class BallotService {
     public List<Election> getAllElectionByVoterId(Integer id) {
         return repository.getAllElectionByVoterId(id);
     };
+
+
+    public void vote(VoteRequest voteRequest) {
+        Integer election_id = voteRequest.getElection_id();
+        Integer voter_id = voteRequest.getVoter_id();
+        List<CreateBallotRequest> ballot_entries = voteRequest.getBallot_entries();
+
+        VotingStrategyType votingStrategyType = electionRepository.findById(election_id).orElseThrow().getVotingStrategy();
+        if (votingStrategyType == VotingStrategyType.ApprovalVoting) {
+            ApprovalVotingStrategy approvalVotingStrategy = new ApprovalVotingStrategy(repository);
+            approvalVotingStrategy.vote(election_id, voter_id, ballot_entries);
+        } else if (votingStrategyType == VotingStrategyType.PluralityVoting) {
+            PluralityVotingStrategy pluralityVotingStrategy = new PluralityVotingStrategy(repository);
+            pluralityVotingStrategy.vote(election_id, voter_id, ballot_entries);
+        } else if (votingStrategyType == VotingStrategyType.DistributionVoting){
+            DistributionVotingStrategy distributionVotingStrategy = new DistributionVotingStrategy(repository);
+            distributionVotingStrategy.vote(election_id, voter_id, ballot_entries);
+        }
+
+    }
 }
 

@@ -18,7 +18,7 @@ import java.sql.Timestamp;
 public class Token {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
     @Basic
     @Column(name = "created_at", nullable = true)
@@ -30,14 +30,21 @@ public class Token {
     @Column(name = "expired_at", nullable = true)
     private Timestamp expiredAt;
 
-    @Column(unique = true)
+    @Basic
+    @Column(name = "token", nullable = false, unique = true)
     public String token;
 
+    @Basic
     @Enumerated(EnumType.STRING)
+    @Column(name = "token_type", nullable = true)
     public TokenType tokenType = TokenType.BEARER;
 
+    @Basic
+    @Column(name = "is_revoked")
     public boolean isRevoked;
 
+    @Basic
+    @Column(name = "is_expired")
     public boolean isExpired;
 
     @ManyToOne(fetch = FetchType.LAZY)

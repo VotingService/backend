@@ -24,7 +24,7 @@ import java.util.Set;
 @Table(name = "elections")
 public class Election {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Basic
     @Column(name = "created_at", nullable = true)
@@ -34,13 +34,22 @@ public class Election {
     private Timestamp updatedAt;
     private String title;
     private String description;
+    @Basic
+    @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;
+    @Basic
+    @Column(name = "end_date", nullable = false)
     private LocalDateTime endDate;
+    @Basic
+    @Column(name = "can_retract_vote", nullable = false)
     private boolean canRetractVote;
+    @Basic
+    @Column(name = "max_votes", nullable = true)
     private Integer maxVotes;
 
-//    @Transient
+    @Basic
     @Enumerated(EnumType.STRING)
+    @Column(name = "voting_strategy", nullable = true)
     private VotingStrategyType votingStrategy;
     @ManyToOne
     @JoinColumn(name = "location_id", referencedColumnName = "id")

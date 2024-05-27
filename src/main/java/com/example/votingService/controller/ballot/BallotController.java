@@ -4,6 +4,7 @@ import com.example.votingService.domain.ballot.Ballot;
 import com.example.votingService.domain.election.Election;
 import com.example.votingService.domain.request.ChangePasswordRequest;
 import com.example.votingService.domain.request.CreateBallotRequest;
+import com.example.votingService.domain.request.VoteRequest;
 import com.example.votingService.domain.user.User;
 import com.example.votingService.dto.BallotDto;
 import com.example.votingService.dto.ElectionDto;
@@ -63,6 +64,12 @@ public class BallotController {
         Ballot newBallot = service.createBallot(ballot);
         BallotDto ballotDto = ballotDtoAssembler.toModel(newBallot);
         return new ResponseEntity<>(ballotDto, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/vote")
+    public ResponseEntity<?> vote(@RequestBody VoteRequest voteRequest) {
+        service.vote(voteRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping

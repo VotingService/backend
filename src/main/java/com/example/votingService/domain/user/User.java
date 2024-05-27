@@ -28,7 +28,7 @@ import java.util.Set;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Basic
     @Column(name = "created_at", nullable = true)
@@ -36,18 +36,29 @@ public class User implements UserDetails {
     @Basic
     @Column(name = "updated_at", nullable = true)
     private Timestamp updatedAt;
+    @Basic
+    @Column(name = "firstname", nullable = false)
     private String firstname;
+    @Basic
+    @Column(name = "lastname", nullable = false)
     private String lastname;
-    @Column(unique = true)
+    @Basic
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
-    @Column(unique = true)
+    @Basic
+    @Column(name = "password", nullable = false, unique = true)
     private String password;
+    @Basic
+    @Temporal(TemporalType.DATE)
+    @Column(name = "birth_date", nullable = true)
     private Date birthDate;
     @ManyToOne
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;
 
+    @Basic
     @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = true)
     private Role role;
 
     @OneToMany(mappedBy = "voter")

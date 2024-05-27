@@ -20,7 +20,7 @@ import java.sql.Timestamp;
 public class Ballot {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Basic
     @Column(name = "created_at", nullable = true)
@@ -38,5 +38,7 @@ public class Ballot {
     @JoinColumn(name = "candidate_id", referencedColumnName = "id")
     private User candidate;
 
+    @Basic
+    @Column(name = "candidate_position", nullable = false)
     private Integer candidatePosition;
 }

@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface VotingStrategy {
 
-    public void vote(Integer election_id, Integer voter_id, ArrayList<Ballot> ballot_entries);
+    public void vote(Integer election_id, Integer voter_id, List<CreateBallotRequest> ballot_entries);
 }

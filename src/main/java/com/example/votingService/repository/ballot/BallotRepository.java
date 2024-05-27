@@ -29,17 +29,11 @@ public interface BallotRepository extends JpaRepository<Ballot, Integer> {
     public List<Election> getAllElectionByVoterId(Integer id);
 
     // correct this query
-    @Query(value = "INSERT INTO Ballot(id, " +
-            "created_at, " +
-            "updated_at, " +
-            "election_id, " +
+    @Query(value = "INSERT INTO ballots(election_id, " +
             "user_id, " +
             "candidate_id, " +
-            "candidate_position) VALUES(:id, :createdAt, :updatedAt, :electionId, :userId, :candidateId, :candidatePosition)", nativeQuery = true)
-    public void saveBallotEntry(@Param("id") Integer id,
-                                @Param("createdAt") Timestamp createdAt,
-                                @Param("updatedAt") Timestamp updatedAt,
-                                @Param("electionId") Integer electionId,
+            "candidate_position) VALUES(:electionId, :userId, :candidateId, :candidatePosition)", nativeQuery = true)
+    public void saveBallotEntry(@Param("electionId") Integer electionId,
                                 @Param("userId") Integer userId,
                                 @Param("candidateId") Integer candidateId,
                                 @Param("candidatePosition") Integer candidatePosition
