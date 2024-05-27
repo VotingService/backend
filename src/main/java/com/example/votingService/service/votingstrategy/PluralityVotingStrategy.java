@@ -27,7 +27,16 @@ public class PluralityVotingStrategy implements VotingStrategy {
         {
             if (ballot_entry.getCandidatePosition() == 1)
             {
-                ballotRepository.saveBallotEntry(ballot_entry);
+                ballotRepository.saveBallotEntry(
+                        ballot_entry.getId(),
+                        ballot_entry.getCreatedAt(),
+                        ballot_entry.getUpdatedAt(),
+                        ballot_entry.getElection().getId(),
+                        ballot_entry.getVoter().getId(),
+                        ballot_entry.getCandidate().getId(),
+                        ballot_entry.getCandidatePosition()
+                );
+
                 break;
             }
         }

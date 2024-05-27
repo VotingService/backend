@@ -29,7 +29,15 @@ public class ApprovalVotingStrategy implements VotingStrategy{
 
         for (Ballot ballot_entry: ballot_entries)
         {
-            ballotRepository.saveBallotEntry(ballot_entry);
+            ballotRepository.saveBallotEntry(
+                    ballot_entry.getId(),
+                    ballot_entry.getCreatedAt(),
+                    ballot_entry.getUpdatedAt(),
+                    ballot_entry.getElection().getId(),
+                    ballot_entry.getVoter().getId(),
+                    ballot_entry.getCandidate().getId(),
+                    ballot_entry.getCandidatePosition()
+            );
         }
     }
 }
