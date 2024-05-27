@@ -45,6 +45,7 @@ public class ElectionService {
                 .endDate(electionRequest.getEndDate())
                 .canRetractVote(electionRequest.getCanRetractVote())
                 .votingStrategy(electionRequest.getVotingStrategy())
+                .maxVotes(electionRequest.getMaxVotes())
                 .location(savedLocation)
                 .build();
 

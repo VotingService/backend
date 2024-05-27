@@ -57,9 +57,4 @@ public class UserService {
 
         repository.save(user);
     }
-
-    public User cancelCandidatship(User user) {
-        user.setRole(Role.USER);
-        return repository.save(user);
-    }
 }

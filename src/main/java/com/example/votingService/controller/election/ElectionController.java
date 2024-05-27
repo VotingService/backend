@@ -74,9 +74,10 @@ public class ElectionController {
 
     @PutMapping
     @PreAuthorize("hasAuthority('admin:update')")
-    public ResponseEntity<?> updateElection(@RequestBody Election election) {
-        electionService.updateElection(election);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<ElectionDto> updateElection(@RequestBody Election electionRequest) {
+        Election election = electionService.updateElection(electionRequest);
+        ElectionDto electionDto = electionDtoAssembler.toModel(election);
+        return new ResponseEntity<>(electionDto, HttpStatus.OK);
     }
 
     @DeleteMapping

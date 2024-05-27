@@ -23,6 +23,7 @@ public class CreateElectionRequest {
     private LocalDateTime endDate;
     private boolean canRetractVote;
     private VotingStrategyType votingStrategy;
+    private Integer maxVotes;
     private Location location;
     public Boolean getCanRetractVote() {
         return canRetractVote;

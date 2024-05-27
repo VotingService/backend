@@ -37,6 +37,7 @@ public class Election {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private boolean canRetractVote;
+    private Integer maxVotes;
 
 //    @Transient
     @Enumerated(EnumType.STRING)

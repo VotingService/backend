@@ -44,4 +44,7 @@ public interface BallotRepository extends JpaRepository<Ballot, Integer> {
                                 @Param("candidateId") Integer candidateId,
                                 @Param("candidatePosition") Integer candidatePosition
     );
+
+    @Query(value = "select b from Ballot b where b.election.id = :id")
+    public List<Ballot> getAllBallotsByElectionId(Integer id);
 }

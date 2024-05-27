@@ -76,9 +76,4 @@ public class UserController {
         service.changePassword(request, connectedUser);
         return ResponseEntity.ok().build();
     }
-
-    @PutMapping("/cancelCandidatship")
-    public User cancelCandidatship(@RequestBody User user) {
-        return service.cancelCandidatship(user);
-    }
 }
