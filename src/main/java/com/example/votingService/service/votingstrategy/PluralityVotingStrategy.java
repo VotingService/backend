@@ -16,10 +16,6 @@ public class PluralityVotingStrategy implements VotingStrategy {
 
     @Autowired
     private final BallotRepository ballotRepository;
-    @Autowired
-    private final ElectionRepository electionRepository;
-    @Autowired
-    private final UserRepository userRepository;
     @Override
     public void vote(Integer election_id, Integer voter_id, ArrayList<Ballot> ballot_entries) {
 

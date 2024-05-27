@@ -19,10 +19,6 @@ public class ApprovalVotingStrategy implements VotingStrategy{
 
     @Autowired
     private final BallotRepository ballotRepository;
-    @Autowired
-    private final ElectionRepository electionRepository;
-    @Autowired
-    private final UserRepository userRepository;
     @Override
     public void vote(Integer election_id, Integer voter_id, ArrayList<Ballot> ballot_entries) {
         List<Ballot> ballots = ballotRepository.getAllBallotsOfVoterInElection(voter_id, election_id);

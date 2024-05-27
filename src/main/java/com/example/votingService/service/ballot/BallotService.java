@@ -3,6 +3,7 @@ package com.example.votingService.service.ballot;
 import com.example.votingService.controller.election.ElectionController;
 import com.example.votingService.domain.ballot.Ballot;
 import com.example.votingService.domain.election.Election;
+import com.example.votingService.domain.election.VotingStrategyType;
 import com.example.votingService.domain.request.ChangePasswordRequest;
 import com.example.votingService.domain.request.CreateBallotRequest;
 import com.example.votingService.domain.user.Role;
@@ -10,6 +11,9 @@ import com.example.votingService.domain.user.User;
 import com.example.votingService.repository.ballot.BallotRepository;
 import com.example.votingService.repository.election.ElectionRepository;
 import com.example.votingService.repository.user.UserRepository;
+import com.example.votingService.service.votingstrategy.ApprovalVotingStrategy;
+import com.example.votingService.service.votingstrategy.DistributionVotingStrategy;
+import com.example.votingService.service.votingstrategy.PluralityVotingStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,6 +45,7 @@ public class BallotService {
         var election = electionRepository.findById(ballotRequest.getElection_id()).orElseThrow();
         var candidate = userRepository.findById(ballotRequest.getCandidate_id()).orElseThrow();
         var voter = userRepository.findById(ballotRequest.getVoter_id()).orElseThrow();
+
         Ballot ballot = Ballot.builder()
                 .election(election)
                 .candidate(candidate)
