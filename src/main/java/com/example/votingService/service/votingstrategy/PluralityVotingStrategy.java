@@ -8,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -23,42 +21,25 @@ public class PluralityVotingStrategy implements VotingStrategy {
     @Autowired
     private final UserRepository userRepository;
     @Override
-    public void vote(Integer election_id, Integer voter_id, Integer candidate_id, Integer candidatePosition) {
-        List<Ballot> ballots = ballotRepository.getAllBallotsOfVoterInElection(voter_id, election_id);
+    public void vote(Integer election_id, Integer voter_id, ArrayList<Ballot> ballot_entries) {
 
-        HashMap<Integer, Integer> candidates = new HashMap<>();
-        for(Ballot ballot: ballots){
-            candidates.put(candidate_id, candidatePosition);
-        }
+        for (Ballot ballot_entry: ballot_entries)
+        {
+            if (ballot_entry.getCandidatePosition() == 1)
+            {
+                ballotRepository.saveBallotEntry(
+                        ballot_entry.getId(),
+                        ballot_entry.getCreatedAt(),
+                        ballot_entry.getUpdatedAt(),
+                        ballot_entry.getElection().getId(),
+                        ballot_entry.getVoter().getId(),
+                        ballot_entry.getCandidate().getId(),
+                        ballot_entry.getCandidatePosition()
+                );
 
-        var election = electionRepository.findById(election_id).orElseThrow();
-        java.time.LocalDateTime now = java.time.LocalDateTime.now();
-        if (now.isBefore(election.getEndDate()) && now.isAfter(election.getStartDate())) {
-            if (election.getCanRetractVote()){
-                if (candidates.get(candidate_id) == null || !Objects.equals(candidates.get(candidate_id), candidatePosition)) {
-                    var candidate = userRepository.findById(candidate_id).orElseThrow();
-                    var voter = userRepository.findById(voter_id).orElseThrow();
-                    Ballot ballot = Ballot.builder()
-                            .election(election)
-                            .candidate(candidate)
-                            .voter(voter)
-                            .candidatePosition(candidatePosition)
-                            .build();
-                    ballotRepository.save(ballot);
-                }
-            } else {
-                if (candidates.get(candidate_id) == null) {
-                    var candidate = userRepository.findById(candidate_id).orElseThrow();
-                    var voter = userRepository.findById(voter_id).orElseThrow();
-                    Ballot ballot = Ballot.builder()
-                            .election(election)
-                            .candidate(candidate)
-                            .voter(voter)
-                            .candidatePosition(candidatePosition)
-                            .build();
-                    ballotRepository.save(ballot);
-                }
+                break;
             }
         }
+
     }
 }
