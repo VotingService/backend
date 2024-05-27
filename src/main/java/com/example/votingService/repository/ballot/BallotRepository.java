@@ -24,7 +24,7 @@ public interface BallotRepository extends JpaRepository<Ballot, Integer> {
     @Query("SELECT e FROM Election e JOIN Ballot b on e = b.election WHERE b.voter.id = :id")
     public List<Election> getAllElectionByVoterId(Integer id);
 
-    // додати норм кверю для цього
-    @Query("SELECT e FROM Election e JOIN Ballot b on e = b.election WHERE b.voter.id = :id")
+    // correct this query
+    @Query(value = "INSERT INTO Ballot VALUES(ballot_entry)")
     public void saveBallotEntry(Ballot ballot_entry);
 }
