@@ -66,7 +66,7 @@ public class BallotService {
     };
 
 
-    public void vote(VoteRequest voteRequest) {
+    public void vote(VoteRequest voteRequest) throws IllegalArgumentException {
         Integer election_id = voteRequest.getElection_id();
         Integer voter_id = voteRequest.getVoter_id();
         List<CreateBallotRequest> ballot_entries = voteRequest.getBallot_entries();
@@ -78,9 +78,14 @@ public class BallotService {
         } else if (votingStrategyType == VotingStrategyType.PluralityVoting) {
             PluralityVotingStrategy pluralityVotingStrategy = new PluralityVotingStrategy(repository);
             pluralityVotingStrategy.vote(election_id, voter_id, ballot_entries);
-        } else if (votingStrategyType == VotingStrategyType.DistributionVoting){
-            DistributionVotingStrategy distributionVotingStrategy = new DistributionVotingStrategy(repository);
-            distributionVotingStrategy.vote(election_id, voter_id, ballot_entries);
+        } else if (votingStrategyType == VotingStrategyType.DistributionVoting) {
+            try {
+                DistributionVotingStrategy distributionVotingStrategy = new DistributionVotingStrategy(repository, electionRepository);
+                distributionVotingStrategy.vote(election_id, voter_id, ballot_entries);
+            } catch (IllegalArgumentException e) {
+                throw e;
+            }
+
         }
 
     }
