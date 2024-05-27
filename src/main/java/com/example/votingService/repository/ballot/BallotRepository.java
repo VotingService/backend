@@ -15,6 +15,8 @@ public interface BallotRepository extends JpaRepository<Ballot, Integer> {
 
     @Query(value = "select b from Ballot b where b.voter.id = :id")
     public List<Ballot> getAllBallotsByVoterId(Integer id);
+    @Query(value = "select b from Ballot b where b.voter.id = :voter_id AND b.election = :election_id")
+    public List<Ballot> getAllBallotsByVoterIdAndElectionId(Integer voter_id, Integer election_id);
 
     @Query(value = "select b from Ballot b where b.election.id = :id")
     public List<Ballot> getAllBallotsByElectionId(Integer id);
