@@ -4,7 +4,6 @@ import com.example.votingService.domain.election.Election;
 import com.example.votingService.dto.CandidateDto;
 import com.example.votingService.dto.ElectionDto;
 import com.example.votingService.dto.assembler.ElectionDtoAssembler;
-import com.example.votingService.dto.assembler.UserDtoAssembler;
 import com.example.votingService.service.election.ElectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -23,8 +22,6 @@ public class ElectionController {
     private ElectionService electionService;
     @Autowired
     private ElectionDtoAssembler electionDtoAssembler;
-    @Autowired
-    private UserDtoAssembler userDtoAssembler;
 
     @GetMapping
     public ResponseEntity<CollectionModel<ElectionDto>> findAllElections() {

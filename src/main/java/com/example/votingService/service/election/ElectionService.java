@@ -11,6 +11,7 @@ import com.example.votingService.repository.election.ElectionRepository;
 import com.example.votingService.repository.location.LocationRepository;
 import com.example.votingService.repository.user.UserRepository;
 import com.example.votingService.util.exception.ElectionNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -112,10 +113,12 @@ public class ElectionService {
         electionRepository.deleteById(id);
     }
 
+    @Transactional
     public void cancelCandidateShipInElection(Integer electionId, Integer candidateId) {
         electionRepository.removeCandidateFromElection(electionId, candidateId);
     }
 
+    @Transactional
     public void registerAsCandidate(Integer electionId, Integer candidateId) {
         electionRepository.addCandidateToElection(electionId, candidateId);
     }

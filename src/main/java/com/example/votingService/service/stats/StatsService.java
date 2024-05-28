@@ -1,14 +1,12 @@
 package com.example.votingService.service.stats;
 
 import com.example.votingService.domain.ballot.Ballot;
-import com.example.votingService.domain.response.SeeUserChoicesResponse;
 import com.example.votingService.domain.response.FullElectionStatsResponse;
 import com.example.votingService.domain.user.User;
 import com.example.votingService.dto.assembler.ElectionDtoAssembler;
 import com.example.votingService.dto.assembler.LocationDtoAssembler;
 import com.example.votingService.dto.assembler.UserDtoAssembler;
 import com.example.votingService.repository.ballot.BallotRepository;
-import com.example.votingService.repository.election.ElectionRepository;
 import com.example.votingService.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,33 +84,11 @@ public class StatsService {
         return response;
     }
 
-    public List<SeeUserChoicesResponse> seeUserChoices(Integer user_id) {
-        List<Ballot> ballots = ballotRepository.getAllBallotsByVoterId(user_id);
-        List<SeeUserChoicesResponse> responseList = new ArrayList<>();
-        for (Ballot ballot: ballots) {
-            SeeUserChoicesResponse response = SeeUserChoicesResponse.builder()
-                    .election(electionDtoAssembler.toModel(ballot.getElection()))
-                    .candidate(userDtoAssembler.toModel(ballot.getCandidate()))
-                    .voter(userDtoAssembler.toModel(ballot.getVoter()))
-                    .candidatePosition(ballot.getCandidatePoint())
-                    .build();
-            responseList.add(response);
-        }
-        return responseList;
+    public List<Ballot> seeUserChoices(Integer user_id) {
+        return ballotRepository.getAllBallotsByVoterId(user_id);
     }
 
-    public List<SeeUserChoicesResponse> seeUserChoicesInElection(Integer user_id, Integer election_id) {
-        List<Ballot> ballots = ballotRepository.getAllBallotsOfVoterInElection(user_id, election_id);
-        List<SeeUserChoicesResponse> responseList = new ArrayList<>();
-        for (Ballot ballot: ballots) {
-            SeeUserChoicesResponse response = SeeUserChoicesResponse.builder()
-                    .election(electionDtoAssembler.toModel(ballot.getElection()))
-                    .candidate(userDtoAssembler.toModel(ballot.getCandidate()))
-                    .voter(userDtoAssembler.toModel(ballot.getVoter()))
-                    .candidatePosition(ballot.getCandidatePoint())
-                    .build();
-            responseList.add(response);
-        }
-        return responseList;
+    public List<Ballot> seeUserChoicesInElection(Integer user_id, Integer election_id) {
+        return ballotRepository.getAllBallotsOfVoterInElection(user_id, election_id);
     }
 }
