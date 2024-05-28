@@ -1,7 +1,6 @@
 package com.example.votingService.controller.Admin;
 
 import com.example.votingService.domain.election.Election;
-import com.example.votingService.domain.request.CreateElectionRequest;
 import com.example.votingService.dto.ElectionDto;
 import com.example.votingService.dto.assembler.ElectionDtoAssembler;
 import com.example.votingService.service.election.ElectionService;
@@ -24,8 +23,8 @@ public class AdminController {
 
     @PostMapping("/createElection")
     @PreAuthorize("hasAuthority('admin:create')")
-    public ResponseEntity<ElectionDto> createElection(@RequestBody CreateElectionRequest electionRequest) {
-        Election election = electionService.createElection(electionRequest);
+    public ResponseEntity<ElectionDto> createElection(@RequestBody Election newElection) {
+        Election election = electionService.createElection(newElection);
         ElectionDto electionDto = electionDtoAssembler.toModel(election);
         return new ResponseEntity<>(electionDto, HttpStatus.OK);
     }
@@ -39,8 +38,8 @@ public class AdminController {
 
     @PutMapping
     @PreAuthorize("hasAuthority('admin:update')")
-    public ResponseEntity<ElectionDto> updateElection(@RequestBody Election electionRequest) {
-        Election election = electionService.updateElection(electionRequest);
+    public ResponseEntity<ElectionDto> updateElection(@RequestBody Election newElection) {
+        Election election = electionService.updateElection(newElection);
         ElectionDto electionDto = electionDtoAssembler.toModel(election);
         return new ResponseEntity<>(electionDto, HttpStatus.OK);
     }

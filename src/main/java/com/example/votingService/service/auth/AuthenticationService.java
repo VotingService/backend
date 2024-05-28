@@ -4,7 +4,6 @@ package com.example.votingService.service.auth;
 import com.example.votingService.config.JwtService;
 import com.example.votingService.domain.location.Location;
 import com.example.votingService.domain.request.AuthenticationRequest;
-import com.example.votingService.domain.request.RegisterRequest;
 import com.example.votingService.domain.response.AuthenticationResponse;
 import com.example.votingService.domain.token.Token;
 import com.example.votingService.domain.token.TokenType;
@@ -35,7 +34,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(User request) {
         Location location = request.getLocation();
 
         location = locationRepository.getLocationsByCountryAndCityAndStreetNameAndHouseNumberAndPostCode(location.getCountry(),

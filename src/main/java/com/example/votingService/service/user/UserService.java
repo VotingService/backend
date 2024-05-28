@@ -2,8 +2,6 @@ package com.example.votingService.service.user;
 
 import com.example.votingService.domain.location.Location;
 import com.example.votingService.domain.request.ChangePasswordRequest;
-import com.example.votingService.domain.request.UpdateUserRequest;
-import com.example.votingService.domain.user.Role;
 import com.example.votingService.domain.user.User;
 import com.example.votingService.repository.location.LocationRepository;
 import com.example.votingService.repository.user.UserRepository;
@@ -39,7 +37,7 @@ public class UserService {
     }
 
     @Transactional
-    public User updateUser(UpdateUserRequest request) {
+    public User updateUser(User request) {
         Location location = request.getLocation();
 
         location = locationRepository.getLocationsByCountryAndCityAndStreetNameAndHouseNumberAndPostCode(location.getCountry(),

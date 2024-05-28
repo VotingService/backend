@@ -1,7 +1,6 @@
 package com.example.votingService.controller.stats;
 
 import com.example.votingService.domain.ballot.Ballot;
-import com.example.votingService.domain.response.FullElectionStatsResponse;
 import com.example.votingService.domain.user.User;
 import com.example.votingService.dto.BallotDto;
 import com.example.votingService.dto.UserDto;
@@ -31,11 +30,6 @@ public class StatsController {
     private final UserDtoAssembler userDtoAssembler;
     @Autowired
     private final BallotDtoAssembler ballotDtoAssembler;
-//    @GetMapping("/fullStats/{election_id}") // +
-//    public ResponseEntity<List<FullElectionStatsResponse>> getFullElectionStats(@PathVariable Integer election_id) {
-//        List<FullElectionStatsResponse> responses = service.seeFullElectionStats(election_id);
-//        return new ResponseEntity<>(responses, HttpStatus.OK);
-//    }
 
     @GetMapping("/electionWinner/{election_id}") // +
     public ResponseEntity<CollectionModel<UserDto>> getElectionWinner(@PathVariable Integer election_id) {

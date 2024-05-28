@@ -2,7 +2,6 @@ package com.example.votingService.service.election;
 
 import com.example.votingService.domain.election.Election;
 import com.example.votingService.domain.location.Location;
-import com.example.votingService.domain.request.CreateElectionRequest;
 import com.example.votingService.domain.user.User;
 import com.example.votingService.dto.CandidateDto;
 import com.example.votingService.dto.assembler.LocationDtoAssembler;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class ElectionService {
@@ -38,7 +36,7 @@ public class ElectionService {
         return electionRepository.findById(id).orElseThrow(() -> new ElectionNotFoundException(id));
     }
 
-    public Election createElection(CreateElectionRequest electionRequest) {
+    public Election createElection(Election electionRequest) {
         Location location = electionRequest.getLocation();
 
         location = locationRepository.getLocationsByCountryAndCityAndStreetNameAndHouseNumberAndPostCode(location.getCountry(),

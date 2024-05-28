@@ -1,11 +1,8 @@
 package com.example.votingService.controller.user;
 
-import com.example.votingService.domain.election.Election;
 import com.example.votingService.domain.request.ChangePasswordRequest;
-import com.example.votingService.domain.request.UpdateUserRequest;
 import com.example.votingService.domain.user.User;
 import com.example.votingService.dto.UserDto;
-import com.example.votingService.dto.assembler.LocationDtoAssembler;
 import com.example.votingService.dto.assembler.UserDtoAssembler;
 import com.example.votingService.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +41,7 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<UserDto> updateUser(@RequestBody UpdateUserRequest request) {
+    public ResponseEntity<UserDto> updateUser(@RequestBody User request) {
         User user = service.updateUser(request);
         UserDto userDto = userDtoAssembler.toModel(user);
         return new ResponseEntity<>(userDto, HttpStatus.OK);
