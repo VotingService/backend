@@ -97,6 +97,8 @@ public class ElectionService {
                     .firstName(candidate.getFirstName())
                     .lastName(candidate.getLastName())
                     .byFather(candidate.getByFather())
+                    .photoUrl(candidate.getPhotoUrl())
+                    .description(candidate.getDescription())
                     .email(candidate.getEmail())
                     .birthDate(candidate.getBirthDate())
                     .location(locationDtoAssembler.toModel(candidate.getLocation()))

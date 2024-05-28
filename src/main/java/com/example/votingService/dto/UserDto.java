@@ -20,6 +20,8 @@ public class UserDto extends RepresentationModel<UserDto> {
     private final String firstName;
     private final String lastName;
     private final String byFather;
+    private final String photoUrl;
+    private final String description;
     private final String email;
     private final String password;
     private final Date birthDate;

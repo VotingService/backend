@@ -59,6 +59,8 @@ public class AuthenticationService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .byFather(request.getByFather())
+                .photoUrl(request.getPhotoUrl())
+                .description(request.getDescription())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())

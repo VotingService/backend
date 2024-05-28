@@ -19,6 +19,8 @@ public class UpdateUserRequest {
     private String firstName;
     private String lastName;
     private String byFather;
+    private String photoUrl;
+    private String description;
     private Date birthDate;
     private Location location;
 }

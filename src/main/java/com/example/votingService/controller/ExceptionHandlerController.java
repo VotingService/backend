@@ -39,6 +39,13 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     @ResponseBody
+    @ExceptionHandler(WrongPasswordException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    String userProgressExistForUserHandler(WrongPasswordException ex) {
+        return ex.getMessage();
+    }
+
+    @ResponseBody
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     String moduleNotFoundHandler(UserNotFoundException ex) {

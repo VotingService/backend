@@ -18,6 +18,8 @@ public class RegisterRequest {
     private String firstName;
     private String lastName;
     private String byFather;
+    private String photoUrl;
+    private String description;
     private String email;
     private String password;
     private Role role;
