@@ -60,8 +60,9 @@ public class BallotService {
         }
     }
 
+    @Transactional
     public void deleteBallotById(Integer id) {
-        repository.deleteById(id);
+        repository.deleteBallotById(id);
     }
 
     public List<Ballot> getAllBallotsByVoterId(Integer id){
@@ -97,4 +98,3 @@ public class BallotService {
 
     }
 }
-

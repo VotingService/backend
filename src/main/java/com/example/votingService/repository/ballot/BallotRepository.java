@@ -36,18 +36,22 @@ public interface BallotRepository extends JpaRepository<Ballot, Integer> {
             "user_id, " +
             "candidate_id, " +
             "candidate_point) VALUES(:electionId, :voterId, :candidateId, :candidatePoint)", nativeQuery = true)
-    public void saveBallotEntry(@Param("electionId") Integer electionId,
+    void saveBallotEntry(@Param("electionId") Integer electionId,
                                 @Param("voterId") Integer voterId,
                                 @Param("candidateId") Integer candidateId,
                                 @Param("candidatePoint") Integer candidatePoint
     );
 
     @Query(value = "select b from Ballot b where b.election.id = :id")
-    public List<Ballot> getAllBallotsByElectionId(Integer id);
+    List<Ballot> getAllBallotsByElectionId(Integer id);
+
+    @Modifying
+    @Query("DELETE FROM Ballot b WHERE b.id = :ballotId")
+    void deleteBallotById(@Param("ballotId") Integer ballotId);
 
     @Modifying
     @Query("UPDATE Ballot b SET b.election.id = :electionId, b.voter.id = :voterId, b.candidate.id = :candidateId, b.candidatePoint = :candidatePoint WHERE b.id = :id")
-    public void update(@Param("id") Integer id,
+    void update(@Param("id") Integer id,
                        @Param("electionId") Integer electionId,
                        @Param("voterId") Integer voterId,
                        @Param("candidateId") Integer candidateId,
