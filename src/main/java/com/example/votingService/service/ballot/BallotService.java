@@ -46,14 +46,12 @@ public class BallotService {
         Integer voterId = request.getVoterId();
 
         var election = electionRepository.findById(electionId).orElseThrow(() -> new ElectionNotFoundException(electionId));
-        var candidate = userRepository.findById(candidateId).orElseThrow(() -> new CandidateNotFoundException(candidateId));
 
         if (election.getCanRetractVote()) {
-            List<User> candidates = electionRepository.getAllCandidatesByElectionId(electionId);
-            if (candidates.contains(candidate)){
-                repository.update(request.getId(), electionId, voterId, candidateId, request.getCandidatePoint());
-            } else {
-                throw new NoSuchCandidateFoundInThisElection(candidateId, electionId);
+            if (userRepository.findById(candidateId).orElseThrow(() -> new CandidateNotFoundException(candidateId)) != null) {
+                if (userRepository.findById(voterId).orElseThrow(() -> new UserNotFoundException(voterId)) != null) {
+                    repository.update(request.getId(), electionId, voterId, candidateId, request.getCandidatePoint());
+                }
             }
         } else {
             throw new CanNotRetractVoteException(electionId);

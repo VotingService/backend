@@ -124,7 +124,7 @@ CREATE TRIGGER set_created_at_in_users_trigger
 EXECUTE FUNCTION set_created_at();
 
 CREATE TRIGGER set_updated_at_in_ballots_trigger
-    BEFORE INSERT ON ballots
+    BEFORE UPDATE ON ballots
     FOR EACH ROW
 EXECUTE FUNCTION set_updated_at();
 
