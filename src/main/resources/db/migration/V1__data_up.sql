@@ -12,13 +12,6 @@ VALUES
     ('Jane', 'Doe', 'Brown', 'jane.doe@example.com', 'password456', '1992-08-20', 'ADMIN', 2),
     ('Alice', 'Smith', 'Johnson', 'alice.smith@example.com', 'password789', '1985-12-10', 'USER', 3);
 
--- Insert fake tokens (assuming tokens are generated upon user creation)
-INSERT INTO "tokens" ("token", "token_type", "user_id")
-VALUES
-    ('token123', 'BEARER', 1),
-    ('token456', 'BEARER', 2),
-    ('token789', 'BEARER', 3);
-
 -- Insert fake elections
 INSERT INTO "elections" ("title", "description", "start_date", "end_date", "can_retract_vote", "max_votes", "voting_strategy", "location_id")
 VALUES
