@@ -44,7 +44,7 @@ public class BallotService {
                 .election(election)
                 .candidate(candidate)
                 .voter(voter)
-                .candidatePosition(ballotRequest.getCandidatePosition())
+                .candidatePoint(ballotRequest.getCandidatePosition())
                 .build();
         return repository.save(ballot);
     }

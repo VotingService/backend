@@ -1,14 +1,18 @@
 package com.example.votingService.service.user;
 
+import com.example.votingService.domain.location.Location;
 import com.example.votingService.domain.request.ChangePasswordRequest;
+import com.example.votingService.domain.request.UpdateUserRequest;
 import com.example.votingService.domain.user.Role;
 import com.example.votingService.domain.user.User;
+import com.example.votingService.repository.location.LocationRepository;
 import com.example.votingService.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.List;
@@ -21,6 +25,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     @Autowired
     private final UserRepository repository;
+    @Autowired
+    private final LocationRepository locationRepository;
 
     public List<User> findAllUsers() {
         return repository.findAll();
@@ -30,12 +36,27 @@ public class UserService {
         return repository.findById(id).orElseThrow();
     }
 
-    public User createUser(User user) {
-        return repository.save(user);
-    }
+    @Transactional
+    public User updateUser(UpdateUserRequest request) {
+        var location = Location.builder()
+                .country(request.getLocation().getCountry())
+                .city(request.getLocation().getCity())
+                .streetName(request.getLocation().getStreetName())
+                .houseNumber(request.getLocation().getHouseNumber())
+                .postCode(request.getLocation().getPostCode())
+                .build();
 
-    public User updateUser(User user) {
-        return repository.save(user);
+        var savedLocation = locationRepository.save(location);
+        request.setLocation(savedLocation);
+
+        repository.updateUser(request.getId(),
+                request.getFirstName(),
+                request.getLastName(),
+                request.getByFather(),
+                request.getBirthDate(),
+                request.getLocation());
+
+        return repository.findById(request.getId()).orElseThrow();
     }
 
     public void deleteUserById(Integer id) {

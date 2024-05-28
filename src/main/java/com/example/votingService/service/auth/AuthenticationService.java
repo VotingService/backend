@@ -42,8 +42,9 @@ public class AuthenticationService {
         var savedLocation = locationRepository.save(location);
         
         var user = User.builder()
-                .firstname(request.getFirstName())
-                .lastname(request.getLastName())
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .byFather(request.getByFather())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())

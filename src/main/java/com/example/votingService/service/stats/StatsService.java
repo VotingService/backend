@@ -39,7 +39,7 @@ public class StatsService {
         HashMap<Integer, Integer> candidates = new HashMap<>();
         for(Ballot ballot: ballots){
             Integer candidate_id = ballot.getCandidate().getId();
-            candidates.put(candidate_id, candidates.getOrDefault(candidate_id, 0) + ballot.getCandidatePosition());
+            candidates.put(candidate_id, candidates.getOrDefault(candidate_id, 0) + ballot.getCandidatePoint());
         }
 
         List<User> users = new ArrayList<>();
@@ -65,7 +65,7 @@ public class StatsService {
         HashMap<Integer, Integer> candidateStats = new HashMap<>();
         for(Ballot ballot: ballots){
             Integer candidate_id = ballot.getCandidate().getId();
-            candidateStats.put(candidate_id, candidateStats.getOrDefault(candidate_id, 0) + ballot.getCandidatePosition());
+            candidateStats.put(candidate_id, candidateStats.getOrDefault(candidate_id, 0) + ballot.getCandidatePoint());
         }
 
         List<FullElectionStatsResponse> response = new ArrayList<>();
@@ -74,8 +74,8 @@ public class StatsService {
             FullElectionStatsResponse electionStatsResponse = FullElectionStatsResponse.builder()
                     .id(candidate.getId())
                     .score(candidateStat.getValue())
-                    .firstname(candidate.getFirstname())
-                    .lastname(candidate.getLastname())
+                    .firstname(candidate.getFirstName())
+                    .lastname(candidate.getFirstName())
                     .email(candidate.getEmail())
                     .password(candidate.getPassword())
                     .birthDate(candidate.getBirthDate())
@@ -94,7 +94,7 @@ public class StatsService {
                     .election(electionDtoAssembler.toModel(ballot.getElection()))
                     .candidate(userDtoAssembler.toModel(ballot.getCandidate()))
                     .voter(userDtoAssembler.toModel(ballot.getVoter()))
-                    .candidatePosition(ballot.getCandidatePosition())
+                    .candidatePosition(ballot.getCandidatePoint())
                     .build();
             responseList.add(response);
         }
@@ -109,7 +109,7 @@ public class StatsService {
                     .election(electionDtoAssembler.toModel(ballot.getElection()))
                     .candidate(userDtoAssembler.toModel(ballot.getCandidate()))
                     .voter(userDtoAssembler.toModel(ballot.getVoter()))
-                    .candidatePosition(ballot.getCandidatePosition())
+                    .candidatePosition(ballot.getCandidatePoint())
                     .build();
             responseList.add(response);
         }

@@ -37,28 +37,31 @@ public class User implements UserDetails {
     @Column(name = "updated_at", nullable = true)
     private Timestamp updatedAt;
     @Basic
-    @Column(name = "firstname", nullable = false)
-    private String firstname;
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
     @Basic
-    @Column(name = "lastname", nullable = false)
-    private String lastname;
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
+    @Basic
+    @Column(name = "by_father", nullable = false)
+    private String byFather;
     @Basic
     @Column(name = "email", nullable = false, unique = true)
     private String email;
     @Basic
-    @Column(name = "password", nullable = false, unique = true)
+    @Column(name = "password", nullable = false)
     private String password;
     @Basic
     @Temporal(TemporalType.DATE)
-    @Column(name = "birth_date", nullable = true)
+    @Column(name = "birth_date", nullable = false)
     private Date birthDate;
-    @ManyToOne
-    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id", referencedColumnName = "id", nullable = false)
     private Location location;
 
     @Basic
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = true)
+    @Column(name = "role", nullable = false)
     private Role role;
 
     @OneToMany(mappedBy = "voter")

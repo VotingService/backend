@@ -21,7 +21,7 @@ public class BallotDtoAssembler implements RepresentationModelAssembler<Ballot, 
                 .electionId(entity.getElection().getId())
                 .voterId(entity.getVoter().getId())
                 .candidateId(entity.getCandidate().getId())
-                .candidatePosition(entity.getCandidatePosition())
+                .candidatePosition(entity.getCandidatePoint())
                 .build();
         Link selfLink = linkTo(methodOn(BallotController.class).findBallotById(ballotDto.getId())).withSelfRel();
         ballotDto.add(selfLink);

@@ -2,6 +2,7 @@ package com.example.votingService.controller.user;
 
 import com.example.votingService.domain.election.Election;
 import com.example.votingService.domain.request.ChangePasswordRequest;
+import com.example.votingService.domain.request.UpdateUserRequest;
 import com.example.votingService.domain.user.User;
 import com.example.votingService.dto.UserDto;
 import com.example.votingService.dto.assembler.LocationDtoAssembler;
@@ -42,17 +43,11 @@ public class UserController {
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody User user) {
-        User new_user = service.createUser(user);
-        UserDto userDto = userDtoAssembler.toModel(new_user);
-        return new ResponseEntity<>(userDto, HttpStatus.CREATED);
-    }
-
     @PutMapping
-    public ResponseEntity<?> updateUser(@RequestBody User user) {
-        service.updateUser(user);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<UserDto> updateUser(@RequestBody UpdateUserRequest request) {
+        User user = service.updateUser(request);
+        UserDto userDto = userDtoAssembler.toModel(user);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

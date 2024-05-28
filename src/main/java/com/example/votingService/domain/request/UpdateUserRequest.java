@@ -13,14 +13,12 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class UpdateUserRequest {
 
+    private Integer id;
     private String firstName;
     private String lastName;
     private String byFather;
-    private String email;
-    private String password;
-    private Role role;
     private Date birthDate;
     private Location location;
 }

@@ -16,7 +16,9 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ballots")
+@Table(name = "ballots", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"election_id", "user_id", "candidate_id"})
+})
 public class Ballot {
 
     @Id
@@ -28,17 +30,17 @@ public class Ballot {
     @Basic
     @Column(name = "updated_at", nullable = true)
     private Timestamp updatedAt;
-    @ManyToOne
-    @JoinColumn(name = "election_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "election_id", nullable = false, referencedColumnName = "id")
     private Election election;
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
     private User voter;
-    @ManyToOne
-    @JoinColumn(name = "candidate_id", referencedColumnName = "id")
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "candidate_id", nullable = false, referencedColumnName = "id")
     private User candidate;
 
     @Basic
-    @Column(name = "candidate_position", nullable = false)
-    private Integer candidatePosition;
+    @Column(name = "candidate_point", nullable = false)
+    private Integer candidatePoint;
 }

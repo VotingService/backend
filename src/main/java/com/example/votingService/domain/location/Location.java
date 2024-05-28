@@ -17,10 +17,9 @@ import java.util.List;
 @Entity
 @Table(name = "locations")
 public class Location {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id", nullable = false)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     @Basic
     @Column(name = "country", nullable = false, length = -1)
     private String country;

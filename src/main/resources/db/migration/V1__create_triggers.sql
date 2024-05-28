@@ -14,6 +14,14 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS set_created_at_in_ballots_trigger ON ballots;
+DROP TRIGGER IF EXISTS set_created_at_in_elections_trigger ON elections;
+DROP TRIGGER IF EXISTS set_created_at_in_tokens_trigger ON tokens;
+DROP TRIGGER IF EXISTS set_created_at_in_users_trigger ON users;
+DROP TRIGGER IF EXISTS set_updated_at_in_ballots_trigger ON ballots;
+DROP TRIGGER IF EXISTS set_updated_at_in_elections_trigger ON elections;
+DROP TRIGGER IF EXISTS set_updated_at_in_users_trigger ON users;
+
 CREATE TRIGGER set_created_at_in_ballots_trigger
     BEFORE INSERT ON ballots
     FOR EACH ROW

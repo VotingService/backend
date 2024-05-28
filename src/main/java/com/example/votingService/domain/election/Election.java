@@ -32,7 +32,11 @@ public class Election {
     @Basic
     @Column(name = "updated_at", nullable = true)
     private Timestamp updatedAt;
+    @Basic
+    @Column(name = "title", nullable = false)
     private String title;
+    @Basic
+    @Column(name = "description", nullable = false)
     private String description;
     @Basic
     @Column(name = "start_date", nullable = false)
@@ -46,19 +50,19 @@ public class Election {
     @Basic
     @Column(name = "max_votes", nullable = true)
     private Integer maxVotes;
-
     @Basic
     @Enumerated(EnumType.STRING)
-    @Column(name = "voting_strategy", nullable = true)
+    @Column(name = "voting_strategy", nullable = false)
     private VotingStrategyType votingStrategy;
-    @ManyToOne
-    @JoinColumn(name = "location_id", referencedColumnName = "id")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "location_id", referencedColumnName = "id", nullable = false)
     private Location location;
 
     @OneToMany(mappedBy = "election")
     private List<Ballot> ballots;
     @ManyToMany(mappedBy = "elections")
-    private Set<User> candidates;
+    private List<User> candidates;
 
     public Boolean getCanRetractVote() {
         return canRetractVote;

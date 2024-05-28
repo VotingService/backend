@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="your_name">
+        <sql>
+            DROP TRIGGER IF EXISTS set_created_at_in_ballots_trigger ON ballots;
+            DROP FUNCTION IF EXISTS set_created_at;
+            CREATE FUNCTION set_created_at()
+                RETURNS TRIGGER AS $$
+            BEGIN
+                NEW.created_at = NOW();
+            RETURN NEW;
+            END;
+            $$ LANGUAGE plpgsql;
+            CREATE TRIGGER set_created_at_in_ballots_trigger
+                BEFORE INSERT ON ballots
+                FOR EACH ROW
+                EXECUTE FUNCTION set_created_at();
+        </sql>
+    </changeSet>
+</databaseChangeLog>

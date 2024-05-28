@@ -21,8 +21,8 @@ public class UserDtoAssembler implements RepresentationModelAssembler<User, User
 
         UserDto userDto = UserDto.builder()
                 .id(entity.getId())
-                .firstName(entity.getFirstname())
-                .lastName(entity.getLastname())
+                .firstName(entity.getFirstName())
+                .lastName(entity.getLastName())
                 .email(entity.getEmail())
                 .password(entity.getPassword())
                 .birthDate(entity.getBirthDate())
