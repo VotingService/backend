@@ -1,6 +1,6 @@
 package com.example.votingService.service.votingstrategy;
 
-import com.example.votingService.domain.request.ballot.CreateBallotRequest;
+import com.example.votingService.domain.request.ballot.BallotRequest;
 import com.example.votingService.repository.ballot.BallotRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +15,17 @@ public class PluralityVotingStrategy implements VotingStrategy {
     @Autowired
     private final BallotRepository ballotRepository;
     @Override
-    public void vote(Integer election_id, Integer voter_id, List<CreateBallotRequest> ballot_entries) {
+    public void vote(Integer electionId, Integer voterId, List<BallotRequest> ballotEntries) {
 
-        for (CreateBallotRequest ballot_entry: ballot_entries)
+        for (BallotRequest ballotEntry: ballotEntries)
         {
-            if (ballot_entry.getCandidatePosition() == 1)
+            if (ballotEntry.getCandidateId() == 1)
             {
                 ballotRepository.saveBallotEntry(
-                        election_id,
-                        voter_id,
-                        ballot_entry.getCandidate_id(),
-                        ballot_entry.getCandidatePosition()
+                        electionId,
+                        voterId,
+                        ballotEntry.getCandidateId(),
+                        ballotEntry.getCandidatePoint()
                 );
 
                 break;

@@ -2,7 +2,6 @@ package com.example.votingService.controller.ballot;
 
 import com.example.votingService.domain.ballot.Ballot;
 import com.example.votingService.domain.election.Election;
-import com.example.votingService.domain.request.ballot.CreateBallotRequest;
 import com.example.votingService.domain.request.VoteRequest;
 import com.example.votingService.domain.request.ballot.UpdateBallotRequest;
 import com.example.votingService.dto.BallotDto;
@@ -46,17 +45,14 @@ public class BallotController {
         return new ResponseEntity<>(ballotDto, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<BallotDto> createBallot(@RequestBody CreateBallotRequest request) {
-        Ballot newBallot = service.createBallot(request);
-        BallotDto ballotDto = ballotDtoAssembler.toModel(newBallot);
-        return new ResponseEntity<>(ballotDto, HttpStatus.CREATED);
-    }
-
     @PostMapping("/vote")
     public ResponseEntity<?> vote(@RequestBody VoteRequest request) {
-        service.vote(request);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        try {
+            service.vote(request);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping
@@ -72,8 +68,8 @@ public class BallotController {
     }
 
     @GetMapping("/voter/{id}")
-    public ResponseEntity<CollectionModel<BallotDto>> findAllBallotsByVoter(@PathVariable Integer id) {
-        List<Ballot> ballots = service.getAllBallotsByVoter(id);
+    public ResponseEntity<CollectionModel<BallotDto>> findAllBallotsByVoterId(@PathVariable Integer id) {
+        List<Ballot> ballots = service.getAllBallotsByVoterId(id);
         CollectionModel<BallotDto> ballotDtos = ballotDtoAssembler.toCollectionModel(ballots);
         return new ResponseEntity<>(ballotDtos, HttpStatus.OK);
     }

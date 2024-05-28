@@ -1,6 +1,6 @@
 package com.example.votingService.domain.request;
 
-import com.example.votingService.domain.request.ballot.CreateBallotRequest;
+import com.example.votingService.domain.request.ballot.BallotRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,5 +16,5 @@ public class VoteRequest {
 
     private Integer election_id;
     private Integer voter_id;
-    private ArrayList<CreateBallotRequest> ballot_entries;
+    private ArrayList<BallotRequest> ballotEntries;
 }

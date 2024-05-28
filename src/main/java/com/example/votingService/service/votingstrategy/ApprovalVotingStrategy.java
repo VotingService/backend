@@ -1,7 +1,7 @@
 package com.example.votingService.service.votingstrategy;
 
 import com.example.votingService.domain.ballot.Ballot;
-import com.example.votingService.domain.request.ballot.CreateBallotRequest;
+import com.example.votingService.domain.request.ballot.BallotRequest;
 import com.example.votingService.repository.ballot.BallotRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +16,16 @@ public class ApprovalVotingStrategy implements VotingStrategy{
     @Autowired
     private final BallotRepository ballotRepository;
     @Override
-    public void vote(Integer election_id, Integer voter_id, List<CreateBallotRequest> ballot_entries) {
-        List<Ballot> ballots = ballotRepository.getAllBallotsOfVoterInElection(voter_id, election_id);
+    public void vote(Integer electionId, Integer voterId, List<BallotRequest> ballotEntries) {
+        List<Ballot> ballots = ballotRepository.getAllBallotsOfVoterInElection(voterId, electionId);
 
-        for (CreateBallotRequest ballot_entry: ballot_entries)
+        for (BallotRequest ballotEntry: ballotEntries)
         {
             ballotRepository.saveBallotEntry(
-                    election_id,
-                    voter_id,
-                    ballot_entry.getCandidate_id(),
-                    ballot_entry.getCandidatePosition()
+                    electionId,
+                    voterId,
+                    ballotEntry.getCandidateId(),
+                    ballotEntry.getCandidatePoint()
             );
         }
     }

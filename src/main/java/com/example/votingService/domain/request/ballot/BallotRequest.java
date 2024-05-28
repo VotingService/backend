@@ -10,10 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateBallotRequest {
+public class BallotRequest {
 
-    @JsonProperty("id")
-    private Integer id;
     @JsonProperty("election_id")
     private Integer electionId;
     @JsonProperty("voter_id")
