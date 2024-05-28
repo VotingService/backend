@@ -1,5 +1,6 @@
 package com.example.votingService.domain.response;
 
+import com.example.votingService.domain.user.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +15,8 @@ public class AuthenticationResponse {
 
     @JsonProperty("id")
     private Integer id;
+    @JsonProperty("role")
+    private Role role;
     @JsonProperty("access_token")
     private String accessToken;
     @JsonProperty("refresh_token")
