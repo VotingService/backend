@@ -67,23 +67,25 @@ public class BallotService {
     }
 
 
+    @Transactional
     public void vote(VoteRequest voteRequest) throws IllegalArgumentException {
         // For Ostap to check
-        Integer election_id = voteRequest.getElection_id();
-        Integer voter_id = voteRequest.getVoter_id();
+        Integer electionId = voteRequest.getElectionId();
+        Integer voterId = voteRequest.getVoterId();
         List<BallotRequest> ballotEntries = voteRequest.getBallotEntries();
 
-        VotingStrategyType votingStrategyType = electionRepository.findById(election_id).orElseThrow().getVotingStrategy();
+        Election election = electionRepository.findById(electionId).orElseThrow(() -> new ElectionNotFoundException(electionId));
+        VotingStrategyType votingStrategyType = election.getVotingStrategy();
         if (votingStrategyType == VotingStrategyType.ApprovalVoting) {
             ApprovalVotingStrategy approvalVotingStrategy = new ApprovalVotingStrategy(repository);
-            approvalVotingStrategy.vote(election_id, voter_id, ballotEntries);
+            approvalVotingStrategy.vote(electionId, voterId, ballotEntries);
         } else if (votingStrategyType == VotingStrategyType.PluralityVoting) {
             PluralityVotingStrategy pluralityVotingStrategy = new PluralityVotingStrategy(repository);
-            pluralityVotingStrategy.vote(election_id, voter_id, ballotEntries);
+            pluralityVotingStrategy.vote(electionId, voterId, ballotEntries);
         } else if (votingStrategyType == VotingStrategyType.DistributionVoting) {
             try {
                 DistributionVotingStrategy distributionVotingStrategy = new DistributionVotingStrategy(repository, electionRepository);
-                distributionVotingStrategy.vote(election_id, voter_id, ballotEntries);
+                distributionVotingStrategy.vote(electionId, voterId, ballotEntries);
             } catch (IllegalArgumentException e) {
                 throw e;
             }

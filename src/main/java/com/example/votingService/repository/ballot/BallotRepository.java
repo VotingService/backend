@@ -35,6 +35,7 @@ public interface BallotRepository extends JpaRepository<Ballot, Integer> {
     public Integer getPointsOfCandidate(Integer id);
 
     // correct this query
+    @Modifying
     @Query(value = "INSERT INTO ballots(election_id, " +
             "user_id, " +
             "candidate_id, " +

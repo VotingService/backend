@@ -1,6 +1,7 @@
 package com.example.votingService.domain.request;
 
 import com.example.votingService.domain.request.ballot.BallotRequest;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +15,10 @@ import java.util.ArrayList;
 @NoArgsConstructor
 public class VoteRequest {
 
-    private Integer election_id;
-    private Integer voter_id;
+    @JsonProperty("election_id")
+    private Integer electionId;
+    @JsonProperty("voter_id")
+    private Integer voterId;
+    @JsonProperty("ballot_entries")
     private ArrayList<BallotRequest> ballotEntries;
 }

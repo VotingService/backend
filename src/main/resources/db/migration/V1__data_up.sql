@@ -30,10 +30,10 @@ VALUES
     (5, 2);
 
 -- Insert fake ballots
-INSERT INTO "ballots" ("election_id", "user_id", "candidate_id", "candidate_point")
-VALUES
-    (1, 1, 4, 1),
-    (1, 1, 5, 1),
-    (2, 1, 4, 1),
-    (2, 2, 4, 1),
-    (2, 3, 5, 1);
+-- INSERT INTO "ballots" ("election_id", "user_id", "candidate_id", "candidate_point")
+-- VALUES
+--     (1, 1, 4, 1),
+--     (1, 1, 5, 1),
+--     (2, 1, 4, 1),
+--     (2, 2, 4, 1),
+--     (2, 3, 5, 1);
