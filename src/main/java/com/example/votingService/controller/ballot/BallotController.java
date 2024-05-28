@@ -2,19 +2,14 @@ package com.example.votingService.controller.ballot;
 
 import com.example.votingService.domain.ballot.Ballot;
 import com.example.votingService.domain.election.Election;
-import com.example.votingService.domain.request.ChangePasswordRequest;
-import com.example.votingService.domain.request.CreateBallotRequest;
+import com.example.votingService.domain.request.ballot.CreateBallotRequest;
 import com.example.votingService.domain.request.VoteRequest;
-import com.example.votingService.domain.user.User;
+import com.example.votingService.domain.request.ballot.UpdateBallotRequest;
 import com.example.votingService.dto.BallotDto;
 import com.example.votingService.dto.ElectionDto;
-import com.example.votingService.dto.UserDto;
 import com.example.votingService.dto.assembler.BallotDtoAssembler;
 import com.example.votingService.dto.assembler.ElectionDtoAssembler;
-import com.example.votingService.dto.assembler.LocationDtoAssembler;
-import com.example.votingService.dto.assembler.UserDtoAssembler;
 import com.example.votingService.service.ballot.BallotService;
-import com.example.votingService.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -22,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -53,21 +47,21 @@ public class BallotController {
     }
 
     @PostMapping
-    public ResponseEntity<BallotDto> createBallot(@RequestBody CreateBallotRequest ballot) {
-        Ballot newBallot = service.createBallot(ballot);
+    public ResponseEntity<BallotDto> createBallot(@RequestBody CreateBallotRequest request) {
+        Ballot newBallot = service.createBallot(request);
         BallotDto ballotDto = ballotDtoAssembler.toModel(newBallot);
         return new ResponseEntity<>(ballotDto, HttpStatus.CREATED);
     }
 
     @PostMapping("/vote")
-    public ResponseEntity<?> vote(@RequestBody VoteRequest voteRequest) {
-        service.vote(voteRequest);
+    public ResponseEntity<?> vote(@RequestBody VoteRequest request) {
+        service.vote(request);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<?> updateBallot(@RequestBody Ballot ballot) {
-        service.updateBallot(ballot);
+    public ResponseEntity<?> updateBallot(@RequestBody UpdateBallotRequest request) {
+        service.updateBallot(request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

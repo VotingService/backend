@@ -1,9 +1,9 @@
 package com.example.votingService.dto.assembler;
 
+import com.example.votingService.controller.Admin.AdminController;
 import com.example.votingService.controller.election.ElectionController;
 import com.example.votingService.domain.election.Election;
 import com.example.votingService.dto.ElectionDto;
-import com.example.votingService.dto.LocationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;

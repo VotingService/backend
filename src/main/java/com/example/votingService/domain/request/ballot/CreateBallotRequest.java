@@ -1,13 +1,9 @@
-package com.example.votingService.domain.request;
+package com.example.votingService.domain.request.ballot;
 
-import com.example.votingService.domain.location.Location;
-import com.example.votingService.domain.user.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 @Data
 @Builder

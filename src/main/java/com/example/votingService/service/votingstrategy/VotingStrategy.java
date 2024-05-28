@@ -1,10 +1,8 @@
 package com.example.votingService.service.votingstrategy;
 
 
-import com.example.votingService.domain.ballot.Ballot;
-import com.example.votingService.domain.request.CreateBallotRequest;
+import com.example.votingService.domain.request.ballot.CreateBallotRequest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface VotingStrategy {

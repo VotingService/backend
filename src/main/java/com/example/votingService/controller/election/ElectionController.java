@@ -18,8 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/admin")
-@PreAuthorize("hasRole('ADMIN')")
+@RequestMapping("/api/v1/election")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ElectionController {
 
@@ -58,40 +57,4 @@ public class ElectionController {
         return new ResponseEntity<>(electionDtos, HttpStatus.OK);
     }
 
-    @PostMapping("/createElection")
-    @PreAuthorize("hasAuthority('admin:create')")
-    public ResponseEntity<ElectionDto> createElection(@RequestBody CreateElectionRequest electionRequest) {
-        Election election = electionService.createElection(electionRequest);
-        ElectionDto electionDto = electionDtoAssembler.toModel(election);
-        return new ResponseEntity<>(electionDto, HttpStatus.OK);
-    }
-
-    @PostMapping("/registerAsCandidate/{electionId}/{candidateId}")
-    @PreAuthorize("hasAuthority('admin:create')")
-    public ResponseEntity<?> registerAsCandidate(@PathVariable Integer electionId, @PathVariable Integer candidateId) {
-        electionService.registerAsCandidate(electionId, candidateId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @PutMapping
-    @PreAuthorize("hasAuthority('admin:update')")
-    public ResponseEntity<ElectionDto> updateElection(@RequestBody Election electionRequest) {
-        Election election = electionService.updateElection(electionRequest);
-        ElectionDto electionDto = electionDtoAssembler.toModel(election);
-        return new ResponseEntity<>(electionDto, HttpStatus.OK);
-    }
-
-    @DeleteMapping
-    @PreAuthorize("hasAuthority('admin:delete')")
-    public ResponseEntity<?> delete(Integer id) {
-        electionService.deleteElectionById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @DeleteMapping("/cancelCandidateShipInElection/{electionId}/{candidateId}")
-    @PreAuthorize("hasAuthority('admin:delete')")
-    public ResponseEntity<?> cancelCandidateShipInElection(@PathVariable Integer electionId, @PathVariable Integer candidateId) {
-        electionService.cancelCandidateShipInElection(electionId, candidateId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }
