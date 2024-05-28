@@ -4,16 +4,17 @@ import com.example.votingService.domain.election.Election;
 import com.example.votingService.domain.location.Location;
 import com.example.votingService.domain.request.CreateElectionRequest;
 import com.example.votingService.domain.user.User;
-import com.example.votingService.dto.assembler.ElectionDtoAssembler;
+import com.example.votingService.dto.CandidateDto;
+import com.example.votingService.dto.assembler.LocationDtoAssembler;
+import com.example.votingService.repository.ballot.BallotRepository;
 import com.example.votingService.repository.election.ElectionRepository;
 import com.example.votingService.repository.location.LocationRepository;
 import com.example.votingService.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ElectionService {
@@ -22,6 +23,10 @@ public class ElectionService {
     private ElectionRepository electionRepository;
     @Autowired
     private LocationRepository locationRepository;
+    @Autowired
+    private BallotRepository ballotRepository;
+    @Autowired
+    private LocationDtoAssembler locationDtoAssembler;
     @Autowired
     private UserRepository userRepository;
     public List<Election> findAllElections() {
@@ -54,8 +59,39 @@ public class ElectionService {
     public Election updateElection(Election election) {
         return electionRepository.save(election);
     }
-    public List<User> getAllCandidatesByElectionId(Integer id) {
-        return electionRepository.getAllCandidatesByElectionId(id);
+    public List<CandidateDto> getAllCandidatesByElectionId(Integer id) {
+        List<User> candidates = electionRepository.getAllCandidatesByElectionId(id);
+        int sumPoints = 0;
+
+        Map<Integer, Integer> candidatePoints = new HashMap<>();
+        for (User candidate: candidates) {
+            Integer candidateId = candidate.getId();
+            Integer point = ballotRepository.getPointsOfCandidate(candidateId);
+            sumPoints = sumPoints + point;
+            candidatePoints.put(candidateId, point);
+        }
+
+        List<CandidateDto> candidateDtoList = new ArrayList<>();
+        for (User candidate: candidates) {
+            Integer candidatePoint = candidatePoints.get(candidate.getId());
+            Double pointInPercentage = ((double) candidatePoint / sumPoints) * 100;
+
+            CandidateDto candidateDto = CandidateDto.builder()
+                    .id(candidate.getId())
+                    .pointInPercentage(pointInPercentage)
+                    .firstName(candidate.getFirstName())
+                    .lastName(candidate.getLastName())
+                    .byFather(candidate.getByFather())
+                    .email(candidate.getEmail())
+                    .birthDate(candidate.getBirthDate())
+                    .location(locationDtoAssembler.toModel(candidate.getLocation()))
+                    .build();
+
+            candidateDtoList.add(candidateDto);
+        }
+        return candidateDtoList.stream()
+                .sorted(Comparator.comparing(CandidateDto::getPointInPercentage).reversed())
+                .toList();
     }
 
     public void deleteElectionById(Integer id) {

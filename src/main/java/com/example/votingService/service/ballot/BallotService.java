@@ -46,15 +46,9 @@ public class BallotService {
         Integer voterId = request.getVoterId();
 
         var election = electionRepository.findById(electionId).orElseThrow(() -> new ElectionNotFoundException(electionId));
-        var candidate = userRepository.findById(candidateId).orElseThrow(() -> new CandidateNotFoundException(candidateId));
 
         if (election.getCanRetractVote()) {
-            List<User> candidates = electionRepository.getAllCandidatesByElectionId(electionId);
-            if (candidates.contains(candidate)){
-                repository.update(request.getId(), electionId, voterId, candidateId, request.getCandidatePoint());
-            } else {
-                throw new NoSuchCandidateFoundInThisElection(candidateId, electionId);
-            }
+            repository.update(request.getId(), electionId, voterId, candidateId, request.getCandidatePoint());
         } else {
             throw new CanNotRetractVoteException(electionId);
         }
@@ -81,20 +75,26 @@ public class BallotService {
         List<BallotRequest> ballotEntries = voteRequest.getBallotEntries();
 
         VotingStrategyType votingStrategyType = electionRepository.findById(election_id).orElseThrow().getVotingStrategy();
-        if (votingStrategyType == VotingStrategyType.ApprovalVoting) {
-            ApprovalVotingStrategy approvalVotingStrategy = new ApprovalVotingStrategy(repository);
-            approvalVotingStrategy.vote(election_id, voter_id, ballotEntries);
-        } else if (votingStrategyType == VotingStrategyType.PluralityVoting) {
-            PluralityVotingStrategy pluralityVotingStrategy = new PluralityVotingStrategy(repository);
-            pluralityVotingStrategy.vote(election_id, voter_id, ballotEntries);
-        } else if (votingStrategyType == VotingStrategyType.DistributionVoting) {
-            try {
-                DistributionVotingStrategy distributionVotingStrategy = new DistributionVotingStrategy(repository, electionRepository);
-                distributionVotingStrategy.vote(election_id, voter_id, ballotEntries);
-            } catch (IllegalArgumentException e) {
-                throw e;
-            }
-        }
 
+        try {
+            switch (votingStrategyType) {
+                case ApprovalVoting:
+                    ApprovalVotingStrategy approvalVotingStrategy = new ApprovalVotingStrategy(repository);
+                    approvalVotingStrategy.vote(election_id, voter_id, ballotEntries);
+                    break;
+                case PluralityVoting:
+                    PluralityVotingStrategy pluralityVotingStrategy = new PluralityVotingStrategy(repository);
+                    pluralityVotingStrategy.vote(election_id, voter_id, ballotEntries);
+                    break;
+                case DistributionVoting:
+                    DistributionVotingStrategy distributionVotingStrategy = new DistributionVotingStrategy(repository, electionRepository);
+                    distributionVotingStrategy.vote(election_id, voter_id, ballotEntries);
+                    break;
+                default:
+                    break;
+            }
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
     }
 }
