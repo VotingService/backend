@@ -21,19 +21,19 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Basic
-    @Column(name = "country", nullable = false, length = -1)
+    @Column(name = "country", nullable = false)
     private String country;
     @Basic
-    @Column(name = "city", nullable = true, length = -1)
+    @Column(name = "city", nullable = true)
     private String city;
     @Basic
-    @Column(name = "street_name", nullable = true, length = -1)
+    @Column(name = "street_name", nullable = true)
     private String streetName;
     @Basic
-    @Column(name = "house_number", nullable = true, length = -1)
+    @Column(name = "house_number", nullable = true)
     private String houseNumber;
     @Basic
-    @Column(name = "post_code", nullable = true, length = -1)
+    @Column(name = "post_code", nullable = true)
     private String postCode;
     @OneToMany(mappedBy = "location")
     private List<Election> elections;
