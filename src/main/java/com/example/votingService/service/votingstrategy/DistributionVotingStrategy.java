@@ -21,6 +21,7 @@ public class DistributionVotingStrategy implements VotingStrategy {
 
     @Override
     public void vote(Integer electionId, Integer voterId, List<BallotRequest> ballotEntries) throws IllegalArgumentException {
+
         int total_votes = 0;
         Election election = electionRepository.findById(electionId).orElseThrow(() -> new ElectionNotFoundException(electionId));
         int maxVotes = election.getMaxVotes();
