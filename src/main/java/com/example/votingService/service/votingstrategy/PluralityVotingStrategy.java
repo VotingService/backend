@@ -15,7 +15,23 @@ public class PluralityVotingStrategy implements VotingStrategy {
     @Autowired
     private final BallotRepository ballotRepository;
     @Override
-    public void vote(Integer electionId, Integer voterId, List<BallotRequest> ballotEntries) {
+    public void vote(Integer electionId, Integer voterId, List<BallotRequest> ballotEntries) throws IllegalArgumentException {
+
+        int total_votes = 0;
+
+        for (BallotRequest ballotEntry: ballotEntries) {
+            Integer candidate_point = ballotEntry.getCandidatePoint();
+
+            if (candidate_point != 0 && candidate_point != 1) {
+                throw new IllegalArgumentException("Incorrect plurality vote value!");
+            }
+
+            total_votes += candidate_point;
+
+            if (total_votes > 1) {
+                throw new IllegalArgumentException("Voted more than once in plurality voting!");
+            }
+        }
 
         for (BallotRequest ballotEntry: ballotEntries)
         {
