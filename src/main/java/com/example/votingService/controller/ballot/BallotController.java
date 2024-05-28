@@ -47,12 +47,8 @@ public class BallotController {
 
     @PostMapping("/vote")
     public ResponseEntity<?> vote(@RequestBody VoteRequest request) {
-        try {
-            service.vote(request);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        service.vote(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping

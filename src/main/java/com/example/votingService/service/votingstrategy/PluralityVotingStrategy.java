@@ -2,6 +2,8 @@ package com.example.votingService.service.votingstrategy;
 
 import com.example.votingService.domain.request.ballot.BallotRequest;
 import com.example.votingService.repository.ballot.BallotRepository;
+import com.example.votingService.util.exception.BadCandidatePointException;
+import com.example.votingService.util.exception.PluralityVoteException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,13 +25,13 @@ public class PluralityVotingStrategy implements VotingStrategy {
             Integer candidate_point = ballotEntry.getCandidatePoint();
 
             if (candidate_point != 0 && candidate_point != 1) {
-                throw new IllegalArgumentException("Incorrect plurality vote value!");
+                throw new BadCandidatePointException();
             }
 
             total_votes += candidate_point;
 
             if (total_votes > 1) {
-                throw new IllegalArgumentException("Voted more than once in plurality voting!");
+                throw new PluralityVoteException();
             }
         }
 

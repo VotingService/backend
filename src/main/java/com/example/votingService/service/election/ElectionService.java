@@ -10,6 +10,7 @@ import com.example.votingService.repository.ballot.BallotRepository;
 import com.example.votingService.repository.election.ElectionRepository;
 import com.example.votingService.repository.location.LocationRepository;
 import com.example.votingService.repository.user.UserRepository;
+import com.example.votingService.util.exception.ElectionNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,15 +34,28 @@ public class ElectionService {
         return electionRepository.findAll();
     }
     public Election findElectionById(Integer id) {
-        return electionRepository.findById(id).orElseThrow();
+        return electionRepository.findById(id).orElseThrow(() -> new ElectionNotFoundException(id));
     }
 
     public Election createElection(CreateElectionRequest electionRequest) {
-        Location location = Location.builder()
-                .country(electionRequest.getLocation().getCountry())
-                .city(electionRequest.getLocation().getCity())
-                .build();
-        Location savedLocation = locationRepository.save(location);
+        Location location = electionRequest.getLocation();
+
+        location = locationRepository.getLocationsByCountryAndCityAndStreetNameAndHouseNumberAndPostCode(location.getCountry(),
+                location.getCity(), location.getStreetName(), location.getHouseNumber(), location.getPostCode());
+
+        if (location == null) {
+            location = electionRequest.getLocation();
+
+            location = Location.builder()
+                    .country(location.getCountry())
+                    .city(location.getCity())
+                    .streetName(location.getStreetName())
+                    .houseNumber(location.getHouseNumber())
+                    .postCode(location.getPostCode())
+                    .build();
+
+            location = locationRepository.save(location);
+        }
 
         Election election = Election.builder()
                 .title(electionRequest.getTitle())
@@ -51,7 +65,7 @@ public class ElectionService {
                 .canRetractVote(electionRequest.getCanRetractVote())
                 .votingStrategy(electionRequest.getVotingStrategy())
                 .maxVotes(electionRequest.getMaxVotes())
-                .location(savedLocation)
+                .location(location)
                 .build();
 
         return electionRepository.save(election);

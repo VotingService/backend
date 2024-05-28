@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface LocationRepository extends JpaRepository<Location, Integer> {
 
+    public Location getLocationsByCountryAndCityAndStreetNameAndHouseNumberAndPostCode(String country, String city, String streetName, String houseNumber, String postCode);
 }

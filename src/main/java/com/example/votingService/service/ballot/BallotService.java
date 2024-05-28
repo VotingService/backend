@@ -36,7 +36,7 @@ public class BallotService {
     }
 
     @Transactional
-    public void updateBallot(UpdateBallotRequest request) throws RuntimeException {
+    public void updateBallot(UpdateBallotRequest request) {
         Integer electionId = request.getElectionId();
         Integer candidateId = request.getCandidateId();
         Integer voterId = request.getVoterId();
@@ -80,12 +80,8 @@ public class BallotService {
             PluralityVotingStrategy pluralityVotingStrategy = new PluralityVotingStrategy(repository);
             pluralityVotingStrategy.vote(electionId, voterId, ballotEntries);
         } else if (votingStrategyType == VotingStrategyType.DistributionVoting) {
-            try {
-                DistributionVotingStrategy distributionVotingStrategy = new DistributionVotingStrategy(repository, electionRepository);
-                distributionVotingStrategy.vote(electionId, voterId, ballotEntries);
-            } catch (IllegalArgumentException e) {
-                throw e;
-            }
+            DistributionVotingStrategy distributionVotingStrategy = new DistributionVotingStrategy(repository, electionRepository);
+            distributionVotingStrategy.vote(electionId, voterId, ballotEntries);
         }
     }
 }

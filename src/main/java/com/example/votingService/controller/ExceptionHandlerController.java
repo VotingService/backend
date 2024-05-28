@@ -32,6 +32,13 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     }
 
     @ResponseBody
+    @ExceptionHandler(UserWithEmailException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    String userProgressExistForUserHandler(UserWithEmailException ex) {
+        return ex.getMessage();
+    }
+
+    @ResponseBody
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     String moduleNotFoundHandler(UserNotFoundException ex) {
@@ -42,6 +49,27 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(CanNotRetractVoteException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     String questionNotFoundHandler(CanNotRetractVoteException ex) {
+        return ex.getMessage();
+    }
+
+    @ResponseBody
+    @ExceptionHandler(BadCandidatePointException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    String questionNotFoundHandler(BadCandidatePointException ex) {
+        return ex.getMessage();
+    }
+
+    @ResponseBody
+    @ExceptionHandler(ExceededMaxVotesException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    String questionNotFoundHandler(ExceededMaxVotesException ex) {
+        return ex.getMessage();
+    }
+
+    @ResponseBody
+    @ExceptionHandler(PluralityVoteException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    String questionNotFoundHandler(PluralityVoteException ex) {
         return ex.getMessage();
     }
 }

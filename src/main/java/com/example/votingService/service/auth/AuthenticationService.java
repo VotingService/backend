@@ -12,6 +12,7 @@ import com.example.votingService.domain.user.User;
 import com.example.votingService.repository.credentials.TokenRepository;
 import com.example.votingService.repository.location.LocationRepository;
 import com.example.votingService.repository.user.UserRepository;
+import com.example.votingService.util.exception.UserWithEmailException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,11 +36,24 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
-        var location = Location.builder()
-                .country(request.getLocation().getCountry())
-                .city(request.getLocation().getCity())
-                .build();
-        var savedLocation = locationRepository.save(location);
+        Location location = request.getLocation();
+
+        location = locationRepository.getLocationsByCountryAndCityAndStreetNameAndHouseNumberAndPostCode(location.getCountry(),
+                location.getCity(), location.getStreetName(), location.getHouseNumber(), location.getPostCode());
+
+        if (location == null) {
+            location = request.getLocation();
+
+            location = Location.builder()
+                    .country(location.getCountry())
+                    .city(location.getCity())
+                    .streetName(location.getStreetName())
+                    .houseNumber(location.getHouseNumber())
+                    .postCode(location.getPostCode())
+                    .build();
+
+            location = locationRepository.save(location);
+        }
         
         var user = User.builder()
                 .firstName(request.getFirstName())
@@ -49,15 +63,16 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
                 .birthDate(request.getBirthDate())
-                .location(savedLocation)
+                .location(location)
                 .build();
+
         if (!repository.existsCurrentAccountByEmail(request.getEmail())) {
             var savedUser = repository.save(user);
             var jwtToken = jwtService.generateToken(user);
             saveUserToken(savedUser, jwtToken);
         }
         else {
-            throw new IllegalStateException("User with this email already exists");
+            throw new UserWithEmailException(request.getEmail());
         }
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
