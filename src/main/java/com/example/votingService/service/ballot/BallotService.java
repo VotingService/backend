@@ -48,11 +48,7 @@ public class BallotService {
         var election = electionRepository.findById(electionId).orElseThrow(() -> new ElectionNotFoundException(electionId));
 
         if (election.getCanRetractVote()) {
-            if (userRepository.findById(candidateId).orElseThrow(() -> new CandidateNotFoundException(candidateId)) != null) {
-                if (userRepository.findById(voterId).orElseThrow(() -> new UserNotFoundException(voterId)) != null) {
-                    repository.update(request.getId(), electionId, voterId, candidateId, request.getCandidatePoint());
-                }
-            }
+            repository.update(request.getId(), electionId, voterId, candidateId, request.getCandidatePoint());
         } else {
             throw new CanNotRetractVoteException(electionId);
         }

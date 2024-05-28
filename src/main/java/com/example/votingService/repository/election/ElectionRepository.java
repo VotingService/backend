@@ -22,5 +22,4 @@ public interface ElectionRepository extends JpaRepository<Election, Integer> {
     void removeCandidateFromElection(@Param("electionId") Integer electionId, @Param("candidateId") Integer candidateId);
     @Query(value = "INSERT INTO candidate_election(candidate_id, election_id) VALUES (:candidateId, :electionId)", nativeQuery = true)
     void addCandidateToElection(@Param("electionId") Integer electionId, @Param("candidateId") Integer candidateId);
-
 }
