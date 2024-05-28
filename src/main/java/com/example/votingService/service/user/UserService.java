@@ -7,6 +7,7 @@ import com.example.votingService.domain.user.Role;
 import com.example.votingService.domain.user.User;
 import com.example.votingService.repository.location.LocationRepository;
 import com.example.votingService.repository.user.UserRepository;
+import com.example.votingService.util.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,7 +34,7 @@ public class UserService {
     }
 
     public User findUserById(Integer id) {
-        return repository.findById(id).orElseThrow();
+        return repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @Transactional

@@ -6,10 +6,8 @@ import com.example.votingService.domain.election.VotingStrategyType;
 import com.example.votingService.domain.request.ballot.BallotRequest;
 import com.example.votingService.domain.request.VoteRequest;
 import com.example.votingService.domain.request.ballot.UpdateBallotRequest;
-import com.example.votingService.domain.user.User;
 import com.example.votingService.repository.ballot.BallotRepository;
 import com.example.votingService.repository.election.ElectionRepository;
-import com.example.votingService.repository.user.UserRepository;
 import com.example.votingService.service.votingstrategy.ApprovalVotingStrategy;
 import com.example.votingService.service.votingstrategy.DistributionVotingStrategy;
 import com.example.votingService.service.votingstrategy.PluralityVotingStrategy;
@@ -28,8 +26,6 @@ public class BallotService {
     private final BallotRepository repository;
     @Autowired
     private final ElectionRepository electionRepository;
-    @Autowired
-    private final UserRepository userRepository;
 
     public List<Ballot> findAllBallots() {
         return repository.findAll();
