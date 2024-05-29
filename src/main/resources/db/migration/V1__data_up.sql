@@ -5,8 +5,8 @@ VALUES
     ('Україна', 'Львів', 'Сахарова', '5', '79000'),
     ('Україна', 'Львів', 'Харківська', '16', '79001'),
     ('Україна', 'Київ', 'Сахарова', '10', '81000'),
-    ('Україна', '', '', '', ''),
-    ('Україна', 'Львів', '', '', '');
+    ('Україна', null, null, null, null),
+    ('Україна', 'Львів', null, null, null);
 
 -- Insert fake users
 INSERT INTO "users" ("photo_url", "description", "first_name", "last_name", "by_father", "email", "password", "birth_date", "role", "location_id")
