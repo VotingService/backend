@@ -59,14 +59,14 @@ public class ElectionService {
     public Election updateElection(Election election) {
         return electionRepository.save(election);
     }
-    public List<CandidateDto> getAllCandidatesByElectionId(Integer id) {
-        List<User> candidates = electionRepository.getAllCandidatesByElectionId(id);
+    public List<CandidateDto> getAllCandidatesByElectionId(Integer electionId) {
+        List<User> candidates = electionRepository.getAllCandidatesByElectionId(electionId);
         int sumPoints = 0;
 
         Map<Integer, Integer> candidatePoints = new HashMap<>();
         for (User candidate: candidates) {
             Integer candidateId = candidate.getId();
-            Integer point = ballotRepository.getPointsOfCandidate(candidateId);
+            Integer point = ballotRepository.getPointsOfCandidate(candidateId, electionId);
             sumPoints = sumPoints + point;
             candidatePoints.put(candidateId, point);
         }

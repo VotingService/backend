@@ -40,9 +40,9 @@ public class ElectionController {
         return new ResponseEntity<>(electionDto, HttpStatus.OK);
     }
 
-    @GetMapping("/candidates/{id}")
-    public ResponseEntity<List<CandidateDto>> getAllCandidatesByElectionId(@PathVariable Integer id) {
-        List<CandidateDto> candidates = electionService.getAllCandidatesByElectionId(id);
+    @GetMapping("/candidates/{electionId}")
+    public ResponseEntity<List<CandidateDto>> getAllCandidatesByElectionId(@PathVariable Integer electionId) {
+        List<CandidateDto> candidates = electionService.getAllCandidatesByElectionId(electionId);
         return new ResponseEntity<>(candidates, HttpStatus.OK);
     }
 
