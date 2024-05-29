@@ -31,8 +31,8 @@ public interface BallotRepository extends JpaRepository<Ballot, Integer> {
     @Query("SELECT e FROM Election e JOIN Ballot b on e = b.election WHERE b.voter.id = :id")
     public List<Election> getAllElectionByVoterId(Integer id);
 
-    @Query("SELECT SUM(b.candidatePoint) FROM Ballot b WHERE b.candidate.id = :id")
-    public Integer getPointsOfCandidate(Integer id);
+    @Query("SELECT SUM(b.candidatePoint) FROM Ballot b WHERE b.candidate.id = :id AND b.election.id = :electionId")
+    public Integer getPointsOfCandidate(Integer id, Integer electionId);
 
     // correct this query
     @Modifying
