@@ -30,7 +30,7 @@ public class PluralityVotingStrategy implements VotingStrategy {
 
             total_votes += candidate_point;
 
-            if (total_votes > 100) {
+            if (total_votes > 1) {
                 throw new PluralityVoteException();
             }
         }
