@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS "users" (
                          "first_name" varchar(255) NOT NULL,
                          "last_name" varchar(255) NOT NULL,
                          by_father varchar(255) not null,
-                         photo_url varchar(255) null,
+                         photo_url text null,
                          description varchar(255) null,
                          "email" varchar(255) UNIQUE NOT NULL,
                          "password" varchar(255) UNIQUE NOT NULL,
