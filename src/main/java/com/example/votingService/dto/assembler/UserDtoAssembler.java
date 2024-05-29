@@ -24,6 +24,8 @@ public class UserDtoAssembler implements RepresentationModelAssembler<User, User
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())
                 .byFather(entity.getByFather())
+                .photoUrl(entity.getPhotoUrl())
+                .description(entity.getDescription())
                 .email(entity.getEmail())
                 .password(entity.getPassword())
                 .birthDate(entity.getBirthDate())

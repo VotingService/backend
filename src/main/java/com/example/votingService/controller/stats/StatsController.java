@@ -1,10 +1,10 @@
 package com.example.votingService.controller.stats;
 
 import com.example.votingService.domain.ballot.Ballot;
-import com.example.votingService.domain.response.FullElectionStatsResponse;
-import com.example.votingService.domain.response.SeeUserChoicesResponse;
 import com.example.votingService.domain.user.User;
+import com.example.votingService.dto.BallotDto;
 import com.example.votingService.dto.UserDto;
+import com.example.votingService.dto.assembler.BallotDtoAssembler;
 import com.example.votingService.dto.assembler.UserDtoAssembler;
 import com.example.votingService.service.stats.StatsService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.hateoas.CollectionModel;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -30,11 +28,8 @@ public class StatsController {
     private final StatsService service;
     @Autowired
     private final UserDtoAssembler userDtoAssembler;
-    @GetMapping("/fullStats/{election_id}") // +
-    public ResponseEntity<List<FullElectionStatsResponse>> getFullElectionStats(@PathVariable Integer election_id) {
-        List<FullElectionStatsResponse> responses = service.seeFullElectionStats(election_id);
-        return new ResponseEntity<>(responses, HttpStatus.OK);
-    }
+    @Autowired
+    private final BallotDtoAssembler ballotDtoAssembler;
 
     @GetMapping("/electionWinner/{election_id}") // +
     public ResponseEntity<CollectionModel<UserDto>> getElectionWinner(@PathVariable Integer election_id) {
@@ -44,14 +39,16 @@ public class StatsController {
     }
 
     @GetMapping("/userChoices/{user_id}") // +
-    public ResponseEntity<List<SeeUserChoicesResponse>> getUserChoices(@PathVariable Integer user_id) {
-        List<SeeUserChoicesResponse> responses = service.seeUserChoices(user_id);
-        return new ResponseEntity<>(responses, HttpStatus.OK);
+    public ResponseEntity<CollectionModel<BallotDto>> getUserChoices(@PathVariable Integer user_id) {
+        List<Ballot> ballots = service.seeUserChoices(user_id);
+        CollectionModel<BallotDto> ballotDtos = ballotDtoAssembler.toCollectionModel(ballots);
+        return new ResponseEntity<>(ballotDtos, HttpStatus.OK);
     }
 
     @GetMapping("/userChoicesInElection/{user_id}/{election_id}")
-    public ResponseEntity<List<SeeUserChoicesResponse>> getUserChoicesInElection(@PathVariable Integer election_id, @PathVariable Integer user_id) {
-        List<SeeUserChoicesResponse> responses = service.seeUserChoicesInElection(user_id, election_id);
-        return new ResponseEntity<>(responses, HttpStatus.OK);
+    public ResponseEntity<CollectionModel<BallotDto>> getUserChoicesInElection(@PathVariable Integer election_id, @PathVariable Integer user_id) {
+        List<Ballot> ballots = service.seeUserChoicesInElection(user_id, election_id);
+        CollectionModel<BallotDto> ballotDtos = ballotDtoAssembler.toCollectionModel(ballots);
+        return new ResponseEntity<>(ballotDtos, HttpStatus.OK);
     }
 }

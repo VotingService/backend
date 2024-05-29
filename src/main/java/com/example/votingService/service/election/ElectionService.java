@@ -2,7 +2,6 @@ package com.example.votingService.service.election;
 
 import com.example.votingService.domain.election.Election;
 import com.example.votingService.domain.location.Location;
-import com.example.votingService.domain.request.CreateElectionRequest;
 import com.example.votingService.domain.user.User;
 import com.example.votingService.dto.CandidateDto;
 import com.example.votingService.dto.assembler.LocationDtoAssembler;
@@ -10,11 +9,12 @@ import com.example.votingService.repository.ballot.BallotRepository;
 import com.example.votingService.repository.election.ElectionRepository;
 import com.example.votingService.repository.location.LocationRepository;
 import com.example.votingService.repository.user.UserRepository;
+import com.example.votingService.util.exception.ElectionNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class ElectionService {
@@ -33,15 +33,28 @@ public class ElectionService {
         return electionRepository.findAll();
     }
     public Election findElectionById(Integer id) {
-        return electionRepository.findById(id).orElseThrow();
+        return electionRepository.findById(id).orElseThrow(() -> new ElectionNotFoundException(id));
     }
 
-    public Election createElection(CreateElectionRequest electionRequest) {
-        Location location = Location.builder()
-                .country(electionRequest.getLocation().getCountry())
-                .city(electionRequest.getLocation().getCity())
-                .build();
-        Location savedLocation = locationRepository.save(location);
+    public Election createElection(Election electionRequest) {
+        Location location = electionRequest.getLocation();
+
+        location = locationRepository.getLocationsByCountryAndCityAndStreetNameAndHouseNumberAndPostCode(location.getCountry(),
+                location.getCity(), location.getStreetName(), location.getHouseNumber(), location.getPostCode());
+
+        if (location == null) {
+            location = electionRequest.getLocation();
+
+            location = Location.builder()
+                    .country(location.getCountry())
+                    .city(location.getCity())
+                    .streetName(location.getStreetName())
+                    .houseNumber(location.getHouseNumber())
+                    .postCode(location.getPostCode())
+                    .build();
+
+            location = locationRepository.save(location);
+        }
 
         Election election = Election.builder()
                 .title(electionRequest.getTitle())
@@ -51,7 +64,7 @@ public class ElectionService {
                 .canRetractVote(electionRequest.getCanRetractVote())
                 .votingStrategy(electionRequest.getVotingStrategy())
                 .maxVotes(electionRequest.getMaxVotes())
-                .location(savedLocation)
+                .location(location)
                 .build();
 
         return electionRepository.save(election);
@@ -82,6 +95,8 @@ public class ElectionService {
                     .firstName(candidate.getFirstName())
                     .lastName(candidate.getLastName())
                     .byFather(candidate.getByFather())
+                    .photoUrl(candidate.getPhotoUrl())
+                    .description(candidate.getDescription())
                     .email(candidate.getEmail())
                     .birthDate(candidate.getBirthDate())
                     .location(locationDtoAssembler.toModel(candidate.getLocation()))
@@ -98,10 +113,12 @@ public class ElectionService {
         electionRepository.deleteById(id);
     }
 
+    @Transactional
     public void cancelCandidateShipInElection(Integer electionId, Integer candidateId) {
         electionRepository.removeCandidateFromElection(electionId, candidateId);
     }
 
+    @Transactional
     public void registerAsCandidate(Integer electionId, Integer candidateId) {
         electionRepository.addCandidateToElection(electionId, candidateId);
     }

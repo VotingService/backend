@@ -6,10 +6,8 @@ import com.example.votingService.domain.election.VotingStrategyType;
 import com.example.votingService.domain.request.ballot.BallotRequest;
 import com.example.votingService.domain.request.VoteRequest;
 import com.example.votingService.domain.request.ballot.UpdateBallotRequest;
-import com.example.votingService.domain.user.User;
 import com.example.votingService.repository.ballot.BallotRepository;
 import com.example.votingService.repository.election.ElectionRepository;
-import com.example.votingService.repository.user.UserRepository;
 import com.example.votingService.service.votingstrategy.ApprovalVotingStrategy;
 import com.example.votingService.service.votingstrategy.DistributionVotingStrategy;
 import com.example.votingService.service.votingstrategy.PluralityVotingStrategy;
@@ -28,8 +26,6 @@ public class BallotService {
     private final BallotRepository repository;
     @Autowired
     private final ElectionRepository electionRepository;
-    @Autowired
-    private final UserRepository userRepository;
 
     public List<Ballot> findAllBallots() {
         return repository.findAll();
@@ -40,7 +36,7 @@ public class BallotService {
     }
 
     @Transactional
-    public void updateBallot(UpdateBallotRequest request) throws RuntimeException {
+    public void updateBallot(UpdateBallotRequest request) {
         Integer electionId = request.getElectionId();
         Integer candidateId = request.getCandidateId();
         Integer voterId = request.getVoterId();
@@ -68,33 +64,24 @@ public class BallotService {
     }
 
 
+    @Transactional
     public void vote(VoteRequest voteRequest) throws IllegalArgumentException {
         // For Ostap to check
-        Integer election_id = voteRequest.getElection_id();
-        Integer voter_id = voteRequest.getVoter_id();
+        Integer electionId = voteRequest.getElectionId();
+        Integer voterId = voteRequest.getVoterId();
         List<BallotRequest> ballotEntries = voteRequest.getBallotEntries();
 
-        VotingStrategyType votingStrategyType = electionRepository.findById(election_id).orElseThrow().getVotingStrategy();
-
-        try {
-            switch (votingStrategyType) {
-                case ApprovalVoting:
-                    ApprovalVotingStrategy approvalVotingStrategy = new ApprovalVotingStrategy(repository);
-                    approvalVotingStrategy.vote(election_id, voter_id, ballotEntries);
-                    break;
-                case PluralityVoting:
-                    PluralityVotingStrategy pluralityVotingStrategy = new PluralityVotingStrategy(repository);
-                    pluralityVotingStrategy.vote(election_id, voter_id, ballotEntries);
-                    break;
-                case DistributionVoting:
-                    DistributionVotingStrategy distributionVotingStrategy = new DistributionVotingStrategy(repository, electionRepository);
-                    distributionVotingStrategy.vote(election_id, voter_id, ballotEntries);
-                    break;
-                default:
-                    break;
-            }
-        } catch (IllegalArgumentException e) {
-            throw e;
+        Election election = electionRepository.findById(electionId).orElseThrow(() -> new ElectionNotFoundException(electionId));
+        VotingStrategyType votingStrategyType = election.getVotingStrategy();
+        if (votingStrategyType == VotingStrategyType.ApprovalVoting) {
+            ApprovalVotingStrategy approvalVotingStrategy = new ApprovalVotingStrategy(repository);
+            approvalVotingStrategy.vote(electionId, voterId, ballotEntries);
+        } else if (votingStrategyType == VotingStrategyType.PluralityVoting) {
+            PluralityVotingStrategy pluralityVotingStrategy = new PluralityVotingStrategy(repository);
+            pluralityVotingStrategy.vote(electionId, voterId, ballotEntries);
+        } else if (votingStrategyType == VotingStrategyType.DistributionVoting) {
+            DistributionVotingStrategy distributionVotingStrategy = new DistributionVotingStrategy(repository, electionRepository);
+            distributionVotingStrategy.vote(electionId, voterId, ballotEntries);
         }
     }
 }

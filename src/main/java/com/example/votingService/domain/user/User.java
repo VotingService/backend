@@ -46,6 +46,12 @@ public class User implements UserDetails {
     @Column(name = "by_father", nullable = false)
     private String byFather;
     @Basic
+    @Column(name = "photo_url", nullable = true)
+    private String photoUrl;
+    @Basic
+    @Column(name = "description", nullable = true)
+    private String description;
+    @Basic
     @Column(name = "email", nullable = false, unique = true)
     private String email;
     @Basic

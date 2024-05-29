@@ -1,8 +1,8 @@
 package com.example.votingService.controller.auth;
 
 import com.example.votingService.domain.request.AuthenticationRequest;
-import com.example.votingService.domain.request.RegisterRequest;
 import com.example.votingService.domain.response.AuthenticationResponse;
+import com.example.votingService.domain.user.User;
 import com.example.votingService.service.auth.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,9 +22,9 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody RegisterRequest request
+            @RequestBody User user
     ) {
-        return ResponseEntity.ok(service.register(request));
+        return ResponseEntity.ok(service.register(user));
     }
 
     @PostMapping("/authenticate")

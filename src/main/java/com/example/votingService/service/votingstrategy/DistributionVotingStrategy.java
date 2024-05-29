@@ -5,6 +5,7 @@ import com.example.votingService.domain.request.ballot.BallotRequest;
 import com.example.votingService.repository.ballot.BallotRepository;
 import com.example.votingService.repository.election.ElectionRepository;
 import com.example.votingService.util.exception.ElectionNotFoundException;
+import com.example.votingService.util.exception.ExceededMaxVotesException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class DistributionVotingStrategy implements VotingStrategy {
             total_votes += ballotEntry.getCandidatePoint();
 
             if (total_votes > maxVotes) {
-                throw new IllegalArgumentException("Exceeded max votes!");
+                throw new ExceededMaxVotesException();
             }
         }
 

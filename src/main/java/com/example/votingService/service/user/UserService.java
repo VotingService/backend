@@ -2,11 +2,11 @@ package com.example.votingService.service.user;
 
 import com.example.votingService.domain.location.Location;
 import com.example.votingService.domain.request.ChangePasswordRequest;
-import com.example.votingService.domain.request.UpdateUserRequest;
-import com.example.votingService.domain.user.Role;
 import com.example.votingService.domain.user.User;
 import com.example.votingService.repository.location.LocationRepository;
 import com.example.votingService.repository.user.UserRepository;
+import com.example.votingService.util.exception.UserNotFoundException;
+import com.example.votingService.util.exception.WrongPasswordException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,30 +33,40 @@ public class UserService {
     }
 
     public User findUserById(Integer id) {
-        return repository.findById(id).orElseThrow();
+        return repository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @Transactional
-    public User updateUser(UpdateUserRequest request) {
-        var location = Location.builder()
-                .country(request.getLocation().getCountry())
-                .city(request.getLocation().getCity())
-                .streetName(request.getLocation().getStreetName())
-                .houseNumber(request.getLocation().getHouseNumber())
-                .postCode(request.getLocation().getPostCode())
-                .build();
+    public User updateUser(User request) {
+        Location location = request.getLocation();
 
-        var savedLocation = locationRepository.save(location);
-        request.setLocation(savedLocation);
+        location = locationRepository.getLocationsByCountryAndCityAndStreetNameAndHouseNumberAndPostCode(location.getCountry(),
+                location.getCity(), location.getStreetName(), location.getHouseNumber(), location.getPostCode());
+
+        if (location == null) {
+            location = request.getLocation();
+
+            location = Location.builder()
+                    .country(location.getCountry())
+                    .city(location.getCity())
+                    .streetName(location.getStreetName())
+                    .houseNumber(location.getHouseNumber())
+                    .postCode(location.getPostCode())
+                    .build();
+
+            location = locationRepository.save(location);
+        }
 
         repository.updateUser(request.getId(),
                 request.getFirstName(),
                 request.getLastName(),
                 request.getByFather(),
+                request.getPhotoUrl(),
+                request.getDescription(),
                 request.getBirthDate(),
-                request.getLocation());
+                location);
 
-        return repository.findById(request.getId()).orElseThrow();
+        return repository.findById(request.getId()).orElseThrow(() -> new UserNotFoundException(request.getId()));
     }
 
     public void deleteUserById(Integer id) {
@@ -68,10 +78,10 @@ public class UserService {
         var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
 
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-            throw new IllegalStateException("Wrong password");
+            throw new WrongPasswordException();
         }
         if (!request.getNewPassword().equals(request.getConfirmationPassword())) {
-            throw new IllegalStateException("Password are not the same");
+            throw new WrongPasswordException();
         }
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
