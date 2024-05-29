@@ -109,9 +109,13 @@ public class ElectionService {
         Map<Integer, Integer> candidatePoints = new HashMap<>();
         for (User candidate: candidates) {
             Integer candidateId = candidate.getId();
-            Integer point = ballotRepository.getPointsOfCandidate(candidateId, electionId);
-            sumPoints = sumPoints + point;
-            candidatePoints.put(candidateId, point);
+
+            if (ballotRepository.getPointsOfCandidate(candidateId, electionId) != null) {
+                sumPoints = sumPoints + ballotRepository.getPointsOfCandidate(candidateId, electionId);
+                candidatePoints.put(candidateId, ballotRepository.getPointsOfCandidate(candidateId, electionId));
+            } else {
+                candidatePoints.put(candidateId, 0);
+            }
         }
 
         List<CandidateDto> candidateDtoList = new ArrayList<>();
