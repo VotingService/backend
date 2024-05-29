@@ -17,7 +17,7 @@ public class PluralityVotingStrategy implements VotingStrategy {
     @Autowired
     private final BallotRepository ballotRepository;
     @Override
-    public void vote(Integer electionId, Integer voterId, List<BallotRequest> ballotEntries) throws IllegalArgumentException {
+    public void vote(Integer electionId, Integer voterId, List<BallotRequest> ballotEntries) {
 
         int total_votes = 0;
 

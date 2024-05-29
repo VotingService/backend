@@ -27,5 +27,6 @@ public class ElectionDto extends RepresentationModel<ElectionDto> {
     private final LocalDateTime endDate;
     private final boolean canRetractVote;
     private final VotingStrategyType votingStrategy;
+    private final Integer maxVotes;
     private final LocationDto location;
 }

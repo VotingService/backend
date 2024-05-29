@@ -17,7 +17,7 @@ public class ApprovalVotingStrategy implements VotingStrategy{
     @Autowired
     private final BallotRepository ballotRepository;
     @Override
-    public void vote(Integer electionId, Integer voterId, List<BallotRequest> ballotEntries) throws IllegalArgumentException {
+    public void vote(Integer electionId, Integer voterId, List<BallotRequest> ballotEntries) {
 
         for (BallotRequest ballotEntry: ballotEntries) {
             Integer candidate_point = ballotEntry.getCandidatePoint();

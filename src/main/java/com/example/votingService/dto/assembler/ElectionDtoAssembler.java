@@ -27,6 +27,7 @@ public class ElectionDtoAssembler implements RepresentationModelAssembler<Electi
                 .endDate(entity.getEndDate())
                 .canRetractVote(entity.getCanRetractVote())
                 .votingStrategy(entity.getVotingStrategy())
+                .maxVotes(entity.getMaxVotes())
                 .location(locationDtoAssembler.toModel(entity.getLocation()))
                 .build();
         Link selfLink = linkTo(methodOn(ElectionController.class).findElectionById(electionDto.getId())).withSelfRel();

@@ -1,6 +1,7 @@
 package com.example.votingService.service.election;
 
 import com.example.votingService.domain.election.Election;
+import com.example.votingService.domain.election.VotingStrategyType;
 import com.example.votingService.domain.location.Location;
 import com.example.votingService.domain.user.User;
 import com.example.votingService.dto.CandidateDto;
@@ -56,6 +57,15 @@ public class ElectionService {
             location = locationRepository.save(location);
         }
 
+        int maxVotes = 0;
+        if (electionRequest.getVotingStrategy() == VotingStrategyType.ApprovalVoting) {
+            maxVotes = 1;
+        } else if (electionRequest.getVotingStrategy() == VotingStrategyType.PluralityVoting) {
+            maxVotes = 1;
+        } else {
+            maxVotes = 100;
+        }
+
         Election election = Election.builder()
                 .title(electionRequest.getTitle())
                 .description(electionRequest.getDescription())
@@ -63,13 +73,33 @@ public class ElectionService {
                 .endDate(electionRequest.getEndDate())
                 .canRetractVote(electionRequest.getCanRetractVote())
                 .votingStrategy(electionRequest.getVotingStrategy())
-                .maxVotes(electionRequest.getMaxVotes())
+                .maxVotes(maxVotes)
                 .location(location)
                 .build();
 
         return electionRepository.save(election);
     }
+
     public Election updateElection(Election election) {
+        Location location = election.getLocation();
+
+        location = locationRepository.getLocationsByCountryAndCityAndStreetNameAndHouseNumberAndPostCode(location.getCountry(),
+                location.getCity(), location.getStreetName(), location.getHouseNumber(), location.getPostCode());
+
+        if (location == null) {
+            location = election.getLocation();
+
+            location = Location.builder()
+                    .country(location.getCountry())
+                    .city(location.getCity())
+                    .streetName(location.getStreetName())
+                    .houseNumber(location.getHouseNumber())
+                    .postCode(location.getPostCode())
+                    .build();
+
+            location = locationRepository.save(location);
+        }
+        election.setLocation(location);
         return electionRepository.save(election);
     }
     public List<CandidateDto> getAllCandidatesByElectionId(Integer id) {
