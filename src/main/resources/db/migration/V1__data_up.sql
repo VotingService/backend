@@ -27,7 +27,7 @@ INSERT INTO "elections" ("title", "description", "start_date", "end_date", "can_
 VALUES
     ('Presidential Election', 'Election for the next president', NOW() - interval '1' day, NOW() + interval '15' day, true, 1, 'PluralityVoting', 5),
     ('Lviv City Council Election', 'Election for city council members', NOW(), NOW() + interval '10' day, false, 1, 'ApprovalVoting', 6),
-    ('Country Council Election', 'Election for country council members', NOW(), NOW() + interval '10' day, false, 1, 'ApprovalVoting', 5);
+    ('Country Council Election', 'Election for country council members', NOW(), NOW() + interval '10' day, false, 100, 'DistributionVoting', 5);
 
 
 -- Insert fake candidate-election relationships
